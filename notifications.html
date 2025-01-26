@@ -9,7 +9,6 @@
   <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0-alpha1/dist/css/bootstrap.min.css">
   <link href="css/tailwind.css" rel="stylesheet">
   <style>
-    /* Sidebar styles */
     .sidebar {
       height: 100%;
       transition: transform 0.3s, opacity 0.3s;
@@ -24,7 +23,6 @@
       pointer-events: none;
     }
 
-    /* Menu button styles */
     .toggle-button {
       position: absolute;
       top: 20px;
@@ -34,7 +32,6 @@
       z-index: 1000;
     }
 
-    /* Styling for the sidebar close button */
     #close-sidebar {
       background: none;
       border: none;
@@ -46,7 +43,6 @@
       color: #fff;
     }
 
-    /* Adjust main content margin to accommodate the sidebar */
     .main-content {
       margin-left: 160px;
     }
@@ -175,21 +171,17 @@
       let order = JSON.parse(localStorage.getItem('order')) || [];
       let isConfirmed = JSON.parse(localStorage.getItem('isConfirmed')) || false;
 
-      // Sidebar toggle
       toggleButton.addEventListener('click', () => {
         sidebar.classList.toggle('hidden');
       });
 
-      // Close sidebar
       closeButton.addEventListener('click', () => {
         sidebar.classList.add('hidden');
       });
 
-      // If there are items in the order, display them
       if (order.length > 0) {
         orderDetailsText.textContent = 'You have a new order!';
 
-        // Loop through the items and display them
         order.forEach((item, index) => {
           const orderItem = document.createElement('div');
           orderItem.className = 'd-flex justify-content-between align-items-center mb-3';
@@ -198,7 +190,6 @@
           `;
           orderItemsContainer.appendChild(orderItem);
 
-          // Add item to modal order items with Remove button
           const modalOrderItem = document.createElement('div');
           modalOrderItem.className = 'd-flex justify-content-between align-items-center mb-3';
           modalOrderItem.innerHTML = `
@@ -216,12 +207,10 @@
         confirmOrderBtn.style.display = 'none'; // Hide Confirm button
       }
 
-      // Update order function
       updateOrderBtn.onclick = () => {
         openNewOrderModal(order);
       };
 
-      // Open modal with order details
       function openNewOrderModal(order) {
         const modal = new bootstrap.Modal(document.getElementById('newOrderModal'));
         modal.show();
@@ -255,7 +244,6 @@
         localStorage.setItem('order', JSON.stringify(order));
         localStorage.setItem('isConfirmed', true);
 
-        // Save confirmed order to recent purchases
         let recentPurchases = JSON.parse(localStorage.getItem('recentPurchases')) || [];
         recentPurchases.push(order);
         localStorage.setItem('recentPurchases', JSON.stringify(recentPurchases));
@@ -264,22 +252,18 @@
         disableButtons();
       }
 
-      // ** Fixed Code for Confirm Button on New Order Notification **
       confirmOrderBtn.onclick = () => {
         if (order.length > 0) {
           alert("Order confirmed!");
           localStorage.setItem('order', JSON.stringify(order));
           localStorage.setItem('isConfirmed', true);
 
-          // Save confirmed order to recent purchases
           let recentPurchases = JSON.parse(localStorage.getItem('recentPurchases')) || [];
           recentPurchases.push(order);
           localStorage.setItem('recentPurchases', JSON.stringify(recentPurchases));
 
-          // Update order details
           updateOrderDetails();
 
-          // Disable buttons
           disableButtons();
         }
       };
