@@ -1,0 +1,138 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>POS Dashboard | Meogeo Sarang Korean Mart</title>
+  <link rel="icon" type="image/png" href="/assets/icons/MSKM_Tab_Logo-32x32.png">
+  <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0-alpha1/dist/css/bootstrap.min.css">
+  <link href="css/tailwind.css" rel="stylesheet">
+  <style>
+    /* Sidebar styles */
+    .sidebar {
+      height: 100vh; /* Ensure the sidebar stretches the full height of the viewport */
+      transition: transform 0.3s, opacity 0.3s;
+      transform: translateX(0);
+      opacity: 1;
+      width: 150px; /* Adjust width as needed */
+    }
+    .sidebar.hidden {
+      transform: translateX(-100%);
+      opacity: 0;
+      pointer-events: none;
+    }
+
+    /* Menu button styles */
+    .toggle-button {
+      position: absolute;
+      top: 20px;
+      left: 20px;
+      font-size: 24px;
+      cursor: pointer;
+      z-index: 1000;
+    }
+
+    /* Styling for the sidebar close button */
+    #close-sidebar {
+      background: none;
+      border: none;
+      font-size: 30px;
+      color: #fff;
+    }
+
+    .nav-link {
+      color: #fff;
+    }
+  </style>
+</head>
+<body class="bg-light">
+
+  <!-- Sidebar and Main Container -->
+  <div class="d-flex">
+    <!-- Sidebar -->
+    <div id="sidebar" class="bg-secondary p-3 sidebar">
+      <div class="d-flex justify-content-between align-items-center mb-5 min-vh-50">
+        <div class="rounded-circle bg-dark" style="width: 60px; height: 60px;"></div>
+        <button id="close-sidebar" class="btn btn-light">&times;</button>
+      </div>
+      <nav class="nav flex-column text-center">
+        <a href="dashboard.html" class="nav-link text-light">Dashboard</a>
+        <a href="pos.html" class="nav-link text-light">PoS</a>
+        <a href="transactions.html" class="nav-link text-light">Transaction</a>
+        <a href="notifications.html" class="nav-link text-light">Notification</a>
+        <span class="nav-link text-light">Account</span>
+      </nav>
+    </div>
+
+    <!-- Main Content -->
+    <div class="flex-grow-1 p-5">
+      <span id="toggle-sidebar" class="toggle-button">&#9776;</span>
+      <div class="container">
+        <div class="text-center mb-4">
+          <h1 class="display-5 fw-bold">Dashboard</h1>
+          <h2 class="text-muted">Hello, "customer's name"</h2>
+        </div>
+        <div class="row g-4 justify-content-center">
+          <div class="col-12 col-md-4">
+            <div class="card p-3 text-center clickable-card" id="recent-purchases">
+              <h5 class="card-title">Recent Purchases</h5>
+              <div class="card-body">
+                <p class="card-text">View your recent purchases here.</p>
+              </div>
+            </div>
+          </div>
+          <div class="col-12 col-md-4">
+            <div class="card p-3 text-center clickable-card" id="favorite-items">
+              <h5 class="card-title">Favorite Items</h5>
+              <div class="card-body">
+                <p class="card-text">Check out your favorite items here.</p>
+              </div>
+            </div>
+          </div>
+          <div class="col-12 col-md-4">
+            <div class="card p-3 text-center clickable-card" id="recommendations">
+              <h5 class="card-title">Recommendations</h5>
+              <div class="card-body">
+                <p class="card-text">Get recommendations tailored for you.</p>
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2.0.0/dist/umd/supabase.min.js"></script>
+  <script src="/javascript/onlinedatabase.js"></script>
+  <script>
+    // Sidebar toggle functionality
+    const sidebar = document.getElementById('sidebar');
+    const toggleButton = document.getElementById('toggle-sidebar');
+    const closeButton = document.getElementById('close-sidebar');
+
+    toggleButton.addEventListener('click', () => {
+      sidebar.classList.remove('hidden');
+      toggleButton.classList.add('hidden');
+    });
+
+    closeButton.addEventListener('click', () => {
+      sidebar.classList.add('hidden');
+      toggleButton.classList.remove('hidden');
+    });
+
+    // Event Listeners for Cards
+    document.getElementById('recent-purchases').addEventListener('click', () => {
+      window.location.href = '/recent-purchases.html';
+    });
+
+    document.getElementById('favorite-items').addEventListener('click', () => {
+      window.location.href = '/favorite-items.html';
+    });
+
+    document.getElementById('recommendations').addEventListener('click', () => {
+      window.location.href = '/recommendations.html';
+    });
+  </script>
+  <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0-alpha1/dist/js/bootstrap.bundle.min.js"></script>
+</body>
+</html>

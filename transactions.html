@@ -1,0 +1,192 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Transactions | POS</title>
+  <link rel="icon" type="image/png" href="/assets/icons/MSKM_Tab_Logo-32x32.png">
+  <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0-alpha1/dist/css/bootstrap.min.css">
+  <link href="css/tailwind.css" rel="stylesheet">
+  <style>
+    /* Sidebar styles */
+    .sidebar {
+      height: 100%;
+      transition: transform 0.3s, opacity 0.3s;
+      transform: translateX(0);
+      opacity: 1;
+      width: 150px;
+    }
+    .sidebar.hidden {
+      transform: translateX(-100%);
+      opacity: 0;
+      pointer-events: none;
+    }
+
+    /* Menu button styles */
+    .toggle-button {
+      position: absolute;
+      top: 20px;
+      left: 20px;
+      font-size: 24px;
+      cursor: pointer;
+      z-index: 1000;
+    }
+
+    /* Styling for the sidebar close button */
+    #close-sidebar {
+      background: none;
+      border: none;
+      font-size: 30px;
+      color: #fff;
+    }
+
+    .nav-link {
+      color: #fff;
+    }
+
+    /* Table Styling */
+    .transaction-table {
+      width: 100%;
+      margin-top: 20px;
+      border-collapse: collapse;
+    }
+    .transaction-table th,
+    .transaction-table td {
+      padding: 12px 15px;
+      text-align: center;
+      border: 1px solid #ddd;
+    }
+    .transaction-table th {
+      background-color: #f8f9fa;
+    }
+  </style>
+</head>
+<body class="bg-light">
+
+  <!-- Sidebar and Main Container -->
+  <div class="d-flex">
+    <!-- Sidebar -->
+    <div id="sidebar" class="bg-secondary p-3 sidebar min-vh-100">
+      <div class="d-flex justify-content-between align-items-center mb-5">
+        <div class="rounded-circle bg-dark" style="width: 60px; height: 60px;"></div>
+        <button id="close-sidebar" class="btn btn-light">&times;</button>
+      </div>
+      <nav class="nav flex-column text-center">
+        <a href="dashboard.html" class="nav-link text-light">Dashboard</a>
+        <a href="pos.html" class="nav-link text-light">PoS</a>
+        <a href="transactions.html" class="nav-link text-light active">Transactions</a>
+        <a href="notifications.html" class="nav-link text-light">Notification</a>
+        <span class="nav-link text-light">Account</span>
+      </nav>
+    </div>
+
+    <!-- Main Content -->
+    <div class="main-content flex-grow-1 p-5">
+      <span id="toggle-sidebar" class="toggle-button">&#9776;</span>
+
+      <div class="container">
+        <div class="text-center mb-4">
+          <h1 class="display-5 fw-bold">Transactions</h1>
+          <h2 class="text-muted">Review your transaction history</h2>
+        </div>
+        
+        <!-- Transaction Table -->
+        <div class="row justify-content-center">
+          <div class="col-12">
+            <div class="card p-3">
+              <h5 class="card-title text-center">Transaction History</h5>
+              <div class="card-body">
+                <!-- Transaction Table -->
+                <table class="transaction-table">
+                  <thead>
+                    <tr>
+                      <th>Transaction ID</th>
+                      <th>Date & Time</th>
+                      <th>Payment Method</th>
+                      <th>Payment Status</th>
+                      <th>Branch</th>
+                    </tr>
+                  </thead>
+                  <tbody id="transaction-table-body">
+                    <!-- Rows will be dynamically added here -->
+                  </tbody>
+                </table>
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <!-- JavaScript and Dependencies -->
+  <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2.0.0/dist/umd/supabase.min.js"></script>
+  <script src="/javascript/onlinedatabase.js"></script>
+  <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0-alpha1/dist/js/bootstrap.bundle.min.js"></script>
+
+  <script>
+    const sidebar = document.getElementById('sidebar');
+    const toggleButton = document.getElementById('toggle-sidebar');
+    const closeButton = document.getElementById('close-sidebar');
+    const transactionTableBody = document.getElementById('transaction-table-body');
+
+    // Toggle sidebar visibility
+    toggleButton.addEventListener('click', () => {
+      sidebar.classList.remove('hidden');
+      toggleButton.classList.add('hidden');
+    });
+
+    // Close sidebar
+    closeButton.addEventListener('click', () => {
+      sidebar.classList.add('hidden');
+      toggleButton.classList.remove('hidden');
+    });
+
+    // Sample Data - Replace this with data from your database
+    const transactions = [
+      {
+        id: 'TXN123456',
+        dateTime: '2024-12-15 14:30:00',
+        paymentMethod: 'cash',
+        paymentStatus: 'Completed',
+        branch: 'Main Branch'
+      },
+      {
+        id: 'TXN123457',
+        dateTime: '2024-12-14 10:20:00',
+        paymentMethod: 'G-Cash',
+        paymentStatus: 'Pending',
+        branch: 'Branch A'
+      },
+      {
+        id: 'TXN123458',
+        dateTime: '2024-12-13 16:45:00',
+        paymentMethod: 'Cash',
+        paymentStatus: 'Completed',
+        branch: 'Branch B'
+      }
+    ];
+
+    // Function to populate transaction table
+    function loadTransactions() {
+      transactionTableBody.innerHTML = '';  // Clear the table
+
+      // Loop through the transactions and create rows
+      transactions.forEach(transaction => {
+        const row = document.createElement('tr');
+        row.innerHTML = `
+          <td>${transaction.id}</td>
+          <td>${transaction.dateTime}</td>
+          <td>${transaction.paymentMethod}</td>
+          <td>${transaction.paymentStatus}</td>
+          <td>${transaction.branch}</td>
+        `;
+        transactionTableBody.appendChild(row);
+      });
+    }
+
+    // Call loadTransactions to populate the table when the page loads
+    loadTransactions();
+  </script>
+</body>
+</html>
