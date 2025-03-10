@@ -100,6 +100,25 @@
         .card-body {
             padding: 15px;
         }
+
+        .sign-out-btn {
+            position: absolute;
+            bottom: 20px;
+            left: 50%;
+            transform: translateX(-50%);
+            background-color: #e74c3c;
+            color: white;
+            padding: 10px 20px;
+            border: none;
+            border-radius: 5px;
+            cursor: pointer;
+            font-size: 16px;
+            transition: background-color 0.3s;
+        }
+
+            .sign-out-btn:hover {
+                background-color: #c0392b;
+            }
     </style>
 </head>
 <body>
@@ -112,6 +131,8 @@
                 <a href="notifications.html" class="nav-link">Notification</a>
                 <a href="account.html" class="nav-link">Account</a>
             </nav>
+            
+            <button class="sign-out-btn">Sign out</button>
         </div>
 
         <div class="flex-grow-1 main-content">
