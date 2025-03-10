@@ -1,334 +1,117 @@
 <!DOCTYPE html>
 <html lang="en">
-
 <head>
-  <meta charset="UTF-8">
-  <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <title>Notifications - POS</title>
-  <link rel="icon" type="image/png" href="/assets/icons/MSKM_Tab_Logo-32x32.png">
-  <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0-alpha1/dist/css/bootstrap.min.css">
-  <link href="css/tailwind.css" rel="stylesheet">
-  <style>
-   
-    .sidebar {
-      height: 100%;
-      transition: transform 0.3s, opacity 0.3s;
-      transform: translateX(0);
-      opacity: 1;
-      width: 150px;
-    }
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Notifications | POS System</title>
+    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0-alpha1/dist/css/bootstrap.min.css">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.2/css/all.min.css">
+    <style>
+        body {
+            background: #f8f9fa;
+        }
 
-    .sidebar.hidden {
-      transform: translateX(-100%);
-      opacity: 0;
-      pointer-events: none;
-    }
+        .sidebar {
+            height: 100vh;
+            width: 200px;
+            position: fixed;
+            top: 0;
+            left: 0;
+            transition: transform 0.3s, opacity 0.3s;
+            transform: translateX(0);
+            opacity: 1;
+            background: #2c3e50;
+            padding-top: 20px;
+        }
 
-    
-    .toggle-button {
-      position: absolute;
-      top: 20px;
-      left: 20px;
-      font-size: 24px;
-      cursor: pointer;
-      z-index: 1000;
-    }
+            .sidebar.hidden {
+                transform: translateX(-100%);
+                opacity: 0;
+                pointer-events: none;
+            }
 
-    
-    #close-sidebar {
-      background: none;
-      border: none;
-      font-size: 30px;
-      color: #fff;
-    }
+        .toggle-button {
+            position: fixed;
+            top: 20px;
+            left: 220px;
+            font-size: 24px;
+            cursor: pointer;
+            z-index: 1000;
+        }
 
-    .nav-link {
-      color: #fff;
-    }
+        .nav-link {
+            color: #ecf0f1;
+            transition: 0.3s;
+        }
 
-   
-    .main-content {
-      margin-left: 160px;
-    }
-  </style>
+            .nav-link:hover {
+                color: #1abc9c;
+            }
+
+        .main-content {
+            padding: 2rem;
+            margin-left: 220px;
+            width: calc(100% - 220px);
+            transition: margin-left 0.3s;
+        }
+
+        .sidebar.hidden + .main-content {
+            margin-left: 0;
+            width: 100%;
+        }
+
+        .notification-card {
+            background: white;
+            padding: 15px;
+            border-radius: 8px;
+            box-shadow: 0 0 10px rgba(0, 0, 0, 0.1);
+            margin-bottom: 15px;
+            transition: 0.3s;
+        }
+
+            .notification-card:hover {
+                transform: translateY(-3px);
+            }
+    </style>
 </head>
-
-<body class="bg-light">
-
- 
-  <div class="d-flex">
-
-    <div id="sidebar" class="bg-secondary p-3 sidebar min-vh-100">
-      <div class="d-flex justify-content-between align-items-center mb-5">
-        <div class="rounded-circle bg-dark" style="width: 60px; height: 60px;"></div>
-        <button id="close-sidebar" class="btn btn-light">&times;</button>
-      </div>
-      <nav class="nav flex-column text-center">
-        <a href="dashboard.html" class="nav-link text-light">Dashboard</a>
-        <a href="products.html" class="nav-link text-light">Products</a>
-        <a href="transactions.html" class="nav-link text-light">Transaction</a>
-        <a href="notifications.html" class="nav-link text-light active">Notification</a>
-        <a href="account.html" class="nav-link text-light">Account</a>
-      </nav>
-    </div>
-
-  
-    <div class="main-content flex-grow-1 p-5">
-      
-      <span id="toggle-sidebar" class="toggle-button">&#9776;</span>
-
-      <div class="container">
-        <div class="text-center mb-4">
-          <h1 class="display-5 fw-bold">Notifications</h1>
-          <h2 class="text-muted">Your notifications will appear here</h2>
+<body>
+    <div class="d-flex">
+        <div id="sidebar" class="p-3 sidebar">
+            <nav class="nav flex-column text-center">
+                <a href="dashboard.html" class="nav-link">Dashboard</a>
+                <a href="products.html" class="nav-link">Products</a>
+                <a href="transactions.html" class="nav-link">Transactions</a>
+                <a href="notifications.html" class="nav-link active">Notifications</a>
+                <a href="account.html" class="nav-link">Account</a>
+            </nav>
         </div>
 
-       
-        <div class="row g-4 justify-content-center">
-         
-          <div class="col-12 col-md-4" id="new-order-notification">
-            <div class="card p-3 text-center">
-              <h5 class="card-title">New Order</h5>
-              <div class="card-body">
-                <p class="card-text" id="new-order-details">
-                  No new orders at the moment.
-                </p>
-     
-                <div id="order-items" class="mt-3"></div>
-                <button class="btn btn-primary mt-3" id="update-order-btn" style="display:none;">Update Order</button>
-             
-                <button class="btn btn-success mt-3" id="confirm-order-btn" style="display:none;">Confirm</button>
-              </div>
+        <div class="flex-grow-1 main-content">
+            <span id="toggle-sidebar" class="toggle-button">&#9776;</span>
+            <h1 class="display-6 fw-bold text-center mb-4">Notifications</h1>
+            <div id="notifications-list" class="container">
+                <div class="notification-card">
+                    <h5>New Order</h5>
+                    <p>Order #12345 has been placed.</p>
+                    <small class="text-muted">Just now</small>
+                </div>
+                <div class="notification-card">
+                    <h5>Payment Received</h5>
+                    <p>Payment for Order #12344 has been confirmed.</p>
+                    <small class="text-muted">5 mins ago</small>
+                </div>
+                <div class="notification-card">
+                    <h5>Stock Alert</h5>
+                    <p>Samyang Ramen is running low on stock.</p>
+                    <small class="text-muted">30 mins ago</small>
+                </div>
             </div>
-          </div>
-
-          
-          <div class="col-12 col-md-4">
-            <div class="card p-3 text-center">
-              <h5 class="card-title">Stock Alert</h5>
-              <div class="card-body">
-                <p class="card-text">Low stock alert for Item XYZ. Time to restock!</p>
-              </div>
-            </div>
-          </div>
-
-         
-          <div class="col-12 col-md-4">
-            <div class="card p-3 text-center">
-              <h5 class="card-title">Payment Received</h5>
-              <div class="card-body">
-                <p class="card-text">Payment of $50 has been successfully received for Order #12345.</p>
-              </div>
-            </div>
-          </div>
         </div>
-      </div>
     </div>
-  </div>
-
-
-  <div class="modal fade" id="newOrderModal" tabindex="-1" aria-labelledby="newOrderModalLabel" aria-hidden="true">
-    <div class="modal-dialog modal-dialog-centered">
-      <div class="modal-content">
-        <div class="modal-header">
-          <h5 class="modal-title" id="newOrderModalLabel">New Order Details</h5>
-          <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
-        </div>
-        <div class="modal-body">
-          <div id="order-details"></div>
-          <div id="payment-method"></div>
-
-          
-          <div id="modal-order-items" class="mt-3"></div>
-
-         
-          <div class="mt-3">
-            <button class="btn btn-info" id="pay-later-btn">Pay Later</button>
-            <button class="btn btn-success" id="gcash-btn">G-Cash</button>
-          </div>
-        
-          <div class="mt-3">
-            <button class="btn btn-success" id="confirm-order-modal-btn" style="display:none;">Confirm Final Order</button>
-          </div>
-        </div>
-      </div>
-    </div>
-  </div>
-
-  
-  <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2.0.0/dist/umd/supabase.min.js"></script>
-  <script src="/javascript/onlinedatabase.js"></script>
-  <script src="/javascript/dashboard.js"></script>
-  <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0-alpha1/dist/js/bootstrap.bundle.min.js"></script>
-
-  <script>
-    document.addEventListener('DOMContentLoaded', () => {
-      const sidebar = document.getElementById('sidebar');
-      const closeButton = document.getElementById('close-sidebar');
-      const toggleButton = document.getElementById('toggle-sidebar');
-      const orderItemsContainer = document.getElementById('order-items');
-      const modalOrderItemsContainer = document.getElementById('modal-order-items');
-      const orderDetailsText = document.getElementById('new-order-details');
-      const updateOrderBtn = document.getElementById('update-order-btn');
-      const confirmOrderModalBtn = document.getElementById('confirm-order-modal-btn');
-      const confirmOrderBtn = document.getElementById('confirm-order-btn'); 
-      let order = JSON.parse(localStorage.getItem('order')) || [];
-      let isConfirmed = JSON.parse(localStorage.getItem('isConfirmed')) || false;
-
-     
-      toggleButton.addEventListener('click', () => {
-        sidebar.classList.toggle('hidden');
-      });
-
-     
-      closeButton.addEventListener('click', () => {
-        sidebar.classList.add('hidden');
-      });
-
-    
-      if (order.length > 0) {
-        orderDetailsText.textContent = 'You have a new order!';
-
-        
-        order.forEach((item, index) => {
-          const orderItem = document.createElement('div');
-          orderItem.className = 'd-flex justify-content-between align-items-center mb-3';
-          orderItem.innerHTML = ` 
-            <span><strong>${item.name}</strong> x ${item.quantity} <br> PHP ${(item.price * item.quantity).toFixed(2)}</span>
-          `;
-          orderItemsContainer.appendChild(orderItem);
-
-         
-          const modalOrderItem = document.createElement('div');
-          modalOrderItem.className = 'd-flex justify-content-between align-items-center mb-3';
-          modalOrderItem.innerHTML = `
-            <span><strong>${item.name}</strong> x ${item.quantity} <br> PHP ${(item.price * item.quantity).toFixed(2)}</span>
-            <button class="btn btn-danger btn-sm" onclick="removeItem(${index})">Remove</button>
-          `;
-          modalOrderItemsContainer.appendChild(modalOrderItem);
+    <script>
+        document.getElementById('toggle-sidebar').addEventListener('click', function () {
+            document.getElementById('sidebar').classList.toggle('hidden');
         });
-
-        updateOrderBtn.style.display = 'block';
-        confirmOrderBtn.style.display = 'block'; 
-      } else {
-        orderDetailsText.textContent = 'No new orders at the moment.';
-        updateOrderBtn.style.display = 'none';
-        confirmOrderBtn.style.display = 'none'; 
-      }
-
-    
-      updateOrderBtn.onclick = () => {
-        openNewOrderModal(order);
-      };
-
-      
-      function openNewOrderModal(order) {
-        const modal = new bootstrap.Modal(document.getElementById('newOrderModal'));
-        modal.show();
-
-        const orderDetails = document.getElementById('order-details');
-        const paymentMethod = document.getElementById('payment-method');
-
-        orderDetails.innerHTML = order.map(item => `${item.name} x${item.quantity}`).join('<br>') +
-          `<br><strong>Total: PHP ${(order.reduce((total, item) => total + (item.price * item.quantity), 0)).toFixed(2)}</strong>`;
-
-        const paymentMethodText = order[0] && order[0].paymentMethod ? order[0].paymentMethod : 'Not selected';
-        paymentMethod.textContent = `Payment Method: ${paymentMethodText}`;
-
-        document.getElementById('pay-later-btn').onclick = () => updatePaymentMethod('Pay Later');
-        document.getElementById('gcash-btn').onclick = () => updatePaymentMethod('G-Cash');
-
-        confirmOrderModalBtn.style.display = 'block';
-        confirmOrderModalBtn.onclick = confirmOrderFromModal;
-      }
-
-      function updatePaymentMethod(method) {
-        order.forEach(item => item.paymentMethod = method);
-        localStorage.setItem('order', JSON.stringify(order));
-
-        const modal = bootstrap.Modal.getInstance(document.getElementById('newOrderModal'));
-        modal.hide();
-      }
-
-      function confirmOrderFromModal() {
-        alert("Order confirmed!");
-        localStorage.setItem('order', JSON.stringify(order));
-        localStorage.setItem('isConfirmed', true);
-
-       
-        let recentPurchases = JSON.parse(localStorage.getItem('recentPurchases')) || [];
-        recentPurchases.push(order);
-        localStorage.setItem('recentPurchases', JSON.stringify(recentPurchases));
-
-        updateOrderDetails();
-        disableButtons();
-      }
-
-      
-      confirmOrderBtn.onclick = () => {
-        if (order.length > 0) {
-          alert("Order confirmed!");
-          localStorage.setItem('order', JSON.stringify(order));
-          localStorage.setItem('isConfirmed', true);
-
-         
-          let recentPurchases = JSON.parse(localStorage.getItem('recentPurchases')) || [];
-          recentPurchases.push(order);
-          localStorage.setItem('recentPurchases', JSON.stringify(recentPurchases));
-
-          
-          updateOrderDetails();
-
-      
-          disableButtons();
-        }
-      };
-
-      function disableButtons() {
-        confirmOrderBtn.disabled = true;
-        updateOrderBtn.disabled = true;
-        confirmOrderModalBtn.disabled = true;
-      }
-
-      window.removeItem = (index) => {
-        order.splice(index, 1);
-        localStorage.setItem('order', JSON.stringify(order));
-        updateOrderDetails();
-      };
-
-      function updateOrderDetails() {
-        orderItemsContainer.innerHTML = '';
-        modalOrderItemsContainer.innerHTML = '';
-
-        if (order.length === 0) {
-          orderDetailsText.textContent = 'No new orders at the moment.';
-          updateOrderBtn.style.display = 'none';
-          confirmOrderBtn.style.display = 'none';
-        } else {
-          orderDetailsText.textContent = 'You have a new order!';
-          order.forEach((item, index) => {
-            const orderItem = document.createElement('div');
-            orderItem.className = 'd-flex justify-content-between align-items-center mb-3';
-            orderItem.innerHTML = `
-              <span><strong>${item.name}</strong> x ${item.quantity} <br> PHP ${(item.price * item.quantity).toFixed(2)}</span>
-            `;
-            orderItemsContainer.appendChild(orderItem);
-
-            const modalOrderItem = document.createElement('div');
-            modalOrderItem.className = 'd-flex justify-content-between align-items-center mb-3';
-            modalOrderItem.innerHTML = `
-              <span><strong>${item.name}</strong> x ${item.quantity} <br> PHP ${(item.price * item.quantity).toFixed(2)}</span>
-              <button class="btn btn-danger btn-sm" onclick="removeItem(${index})">Remove</button>
-            `;
-            modalOrderItemsContainer.appendChild(modalOrderItem);
-          });
-          updateOrderBtn.style.display = 'block';
-          confirmOrderBtn.style.display = 'block';
-        }
-      }
-    });
-  </script>
-
+    </script>
 </body>
-
 </html>
