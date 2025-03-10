@@ -1,190 +1,149 @@
 <!DOCTYPE html>
 <html lang="en">
 <head>
-  <meta charset="UTF-8">
-  <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <title>Transactions | POS</title>
-  <link rel="icon" type="image/png" href="/assets/icons/MSKM_Tab_Logo-32x32.png">
-  <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0-alpha1/dist/css/bootstrap.min.css">
-  <link href="css/tailwind.css" rel="stylesheet">
-  <style>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>POS | Transactions</title>
+    <link rel="icon" type="image/png" href="/assets/icons/MSKM_Tab_Logo-32x32.png">
+    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0-alpha1/dist/css/bootstrap.min.css">
+    <style>
+        body {
+            background: #f8f9fa;
+        }
 
-    .sidebar {
-      height: 100%;
-      transition: transform 0.3s, opacity 0.3s;
-      transform: translateX(0);
-      opacity: 1;
-      width: 150px;
-    }
-    .sidebar.hidden {
-      transform: translateX(-100%);
-      opacity: 0;
-      pointer-events: none;
-    }
+        .sidebar {
+            height: 100vh;
+            width: 200px;
+            position: fixed;
+            top: 0;
+            left: 0;
+            transition: transform 0.3s, opacity 0.3s;
+            transform: translateX(0);
+            opacity: 1;
+            background: #2c3e50;
+            padding-top: 20px;
+        }
 
-    
-    .toggle-button {
-      position: absolute;
-      top: 20px;
-      left: 20px;
-      font-size: 24px;
-      cursor: pointer;
-      z-index: 1000;
-    }
+            .sidebar.hidden {
+                transform: translateX(-100%);
+                opacity: 0;
+                pointer-events: none;
+            }
 
+        .toggle-button {
+            position: fixed;
+            top: 20px;
+            left: 220px;
+            font-size: 24px;
+            cursor: pointer;
+            z-index: 1000;
+        }
 
-    #close-sidebar {
-      background: none;
-      border: none;
-      font-size: 30px;
-      color: #fff;
-    }
+        .nav-link {
+            color: #ecf0f1;
+            transition: 0.3s;
+        }
 
-    .nav-link {
-      color: #fff;
-    }
+            .nav-link:hover {
+                color: #1abc9c;
+            }
 
-  
-    .transaction-table {
-      width: 100%;
-      margin-top: 20px;
-      border-collapse: collapse;
-    }
-    .transaction-table th,
-    .transaction-table td {
-      padding: 12px 15px;
-      text-align: center;
-      border: 1px solid #ddd;
-    }
-    .transaction-table th {
-      background-color: #f8f9fa;
-    }
-  </style>
+        .main-content {
+            padding: 2rem;
+            margin-left: 220px;
+            width: calc(100% - 220px);
+            transition: margin-left 0.3s;
+        }
+
+        .sidebar.hidden + .main-content {
+            margin-left: 0;
+            width: 100%;
+        }
+
+        .transaction-title {
+            font-size: 2.5rem;
+            font-weight: bold;
+            color: #2c3e50;
+            text-align: center;
+            border-bottom: 2px solid #ddd;
+            padding-bottom: 0.5rem;
+            margin-bottom: 1.5rem;
+        }
+
+        .transaction-card {
+            background: #ffffff;
+            border-radius: 12px;
+            padding: 20px;
+            box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
+        }
+    </style>
 </head>
-<body class="bg-light">
-
-  <div class="d-flex">
-
-    <div id="sidebar" class="bg-secondary p-3 sidebar min-vh-100">
-      <div class="d-flex justify-content-between align-items-center mb-5">
-        <div class="rounded-circle bg-dark" style="width: 60px; height: 60px;"></div>
-        <button id="close-sidebar" class="btn btn-light">&times;</button>
-      </div>
-      <nav class="nav flex-column text-center">
-        <a href="dashboard.html" class="nav-link text-light">Dashboard</a>
-        <a href="products.html" class="nav-link text-light">Products</a> 
-        <a href="transactions.html" class="nav-link text-light active">Transaction</a>
-        <a href="notifications.html" class="nav-link text-light">Notification</a>
-        <a href="account.html" class="nav-link text-light">Account</a> <
-      </nav>
-    </div>
-
-    
-    <div class="main-content flex-grow-1 p-5">
-      <span id="toggle-sidebar" class="toggle-button">&#9776;</span>
-
-      <div class="container">
-        <div class="text-center mb-4">
-          <h1 class="display-5 fw-bold">Transactions</h1>
-          <h2 class="text-muted">Review your transaction history</h2>
+<body>
+    <div class="d-flex">
+        <div id="sidebar" class="p-3 sidebar">
+            <nav class="nav flex-column text-center">
+                <a href="dashboard.html" class="nav-link">Dashboard</a>
+                <a href="products.html" class="nav-link">Products</a>
+                <a href="transactions.html" class="nav-link active">Transaction</a>
+                <a href="notifications.html" class="nav-link">Notification</a>
+                <a href="account.html" class="nav-link">Account</a>
+            </nav>
         </div>
-        
-       
-        <div class="row justify-content-center">
-          <div class="col-12">
-            <div class="card p-3">
-              <h5 class="card-title text-center">Transaction History</h5>
-              <div class="card-body">
-             
-                <table class="transaction-table">
-                  <thead>
-                    <tr>
-                      <th>Transaction ID</th>
-                      <th>Date & Time</th>
-                      <th>Payment Method</th>
-                      <th>Payment Status</th>
-                      <th>Branch</th>
-                    </tr>
-                  </thead>
-                  <tbody id="transaction-table-body">
-                 
-                  </tbody>
-                </table>
-              </div>
+
+        <div class="flex-grow-1 main-content">
+            <span id="toggle-sidebar" class="toggle-button">&#9776;</span>
+            <h1 class="transaction-title">Transaction History</h1>
+
+            <div class="container">
+                <div class="transaction-card">
+                    <table class="table table-striped text-center">
+                        <thead class="table-dark">
+                            <tr>
+                                <th>Transaction ID</th>
+                                <th>Date & Time</th>
+                                <th>Payment Method</th>
+                                <th>Payment Status</th>
+                                <th>Branch</th>
+                            </tr>
+                        </thead>
+                        <tbody id="transaction-table-body">
+                        </tbody>
+                    </table>
+                </div>
             </div>
-          </div>
         </div>
-      </div>
     </div>
-  </div>
 
+    <script>
+        document.getElementById('toggle-sidebar').addEventListener('click', function () {
+            document.getElementById('sidebar').classList.toggle('hidden');
+            document.querySelector('.main-content').classList.toggle('expanded');
+        });
 
-  <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2.0.0/dist/umd/supabase.min.js"></script>
-  <script src="/javascript/onlinedatabase.js"></script>
-  <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0-alpha1/dist/js/bootstrap.bundle.min.js"></script>
+        const transactions = [
+            { id: 'TXN123456', dateTime: '2024-12-15 14:30:00', paymentMethod: 'Cash', paymentStatus: 'Completed', branch: 'Main Branch' },
+            { id: 'TXN123457', dateTime: '2024-12-14 10:20:00', paymentMethod: 'G-Cash', paymentStatus: 'Pending', branch: 'Branch A' },
+            { id: 'TXN123458', dateTime: '2024-12-13 16:45:00', paymentMethod: 'Cash', paymentStatus: 'Completed', branch: 'Branch B' }
+        ];
 
-  <script>
-    const sidebar = document.getElementById('sidebar');
-    const toggleButton = document.getElementById('toggle-sidebar');
-    const closeButton = document.getElementById('close-sidebar');
-    const transactionTableBody = document.getElementById('transaction-table-body');
+        function loadTransactions() {
+            const transactionTableBody = document.getElementById('transaction-table-body');
+            transactionTableBody.innerHTML = '';
 
+            transactions.forEach(transaction => {
+                const row = document.createElement('tr');
+                row.innerHTML = `
+                        <td>${transaction.id}</td>
+                        <td>${transaction.dateTime}</td>
+                        <td>${transaction.paymentMethod}</td>
+                        <td>${transaction.paymentStatus}</td>
+                        <td>${transaction.branch}</td>
+                    `;
+                transactionTableBody.appendChild(row);
+            });
+        }
 
-    toggleButton.addEventListener('click', () => {
-      sidebar.classList.remove('hidden');
-      toggleButton.classList.add('hidden');
-    });
-
-    closeButton.addEventListener('click', () => {
-      sidebar.classList.add('hidden');
-      toggleButton.classList.remove('hidden');
-    });
-
-
-    const transactions = [
-      {
-        id: 'TXN123456',
-        dateTime: '2024-12-15 14:30:00',
-        paymentMethod: 'cash',
-        paymentStatus: 'Completed',
-        branch: 'Main Branch'
-      },
-      {
-        id: 'TXN123457',
-        dateTime: '2024-12-14 10:20:00',
-        paymentMethod: 'G-Cash',
-        paymentStatus: 'Pending',
-        branch: 'Branch A'
-      },
-      {
-        id: 'TXN123458',
-        dateTime: '2024-12-13 16:45:00',
-        paymentMethod: 'Cash',
-        paymentStatus: 'Completed',
-        branch: 'Branch B'
-      }
-    ];
-
-
-    function loadTransactions() {
-      transactionTableBody.innerHTML = '';  
-
-
-      transactions.forEach(transaction => {
-        const row = document.createElement('tr');
-        row.innerHTML = ` 
-          <td>${transaction.id}</td>
-          <td>${transaction.dateTime}</td>
-          <td>${transaction.paymentMethod}</td>
-          <td>${transaction.paymentStatus}</td>
-          <td>${transaction.branch}</td>
-        `;
-        transactionTableBody.appendChild(row);
-      });
-    }
-
-
-    loadTransactions();
-  </script>
+        loadTransactions();
+    </script>
 </body>
 </html>
