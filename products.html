@@ -139,6 +139,25 @@
                 padding-right: 5px;
             }
         }
+
+        .sign-out-btn {
+            position: absolute;
+            bottom: 20px;
+            left: 50%;
+            transform: translateX(-50%);
+            background-color: #e74c3c;
+            color: white;
+            padding: 10px 20px;
+            border: none;
+            border-radius: 5px;
+            cursor: pointer;
+            font-size: 16px;
+            transition: background-color 0.3s;
+        }
+
+            .sign-out-btn:hover {
+                background-color: #c0392b;
+            }
     </style>
 </head>
 
@@ -153,6 +172,9 @@
                 <a href="notifications.html" class="nav-link">Notifications</a>
                 <a href="account.html" class="nav-link">Account</a>
             </nav>
+
+            
+            <button class="sign-out-btn">Sign out</button>
         </div>
 
         <div class="cart-sidebar">
@@ -234,13 +256,13 @@
             filteredProducts.forEach(product => {
                 let productCard =
                     `<div class="col-md-4 col-lg-3">
-                                    <div class="product-card">
-                                        <h5>${product.name}</h5>
-                                        <p>Price: ₱${product.price.toFixed(2)}</p>
-                                        <input type="number" id="bulk-quantity-${product.id}" class="form-control mb-2" placeholder="Bulk Quantity" value="1" min="1" />
-                                        <button class="btn btn-primary btn-sm" onclick="addToCart(${product.id})">Add to Cart</button>
-                                    </div>
-                                </div>`;
+                            <div class="product-card">
+                                <h5>${product.name}</h5>
+                                <p>Price: ₱${product.price.toFixed(2)}</p>
+                                <input type="number" id="bulk-quantity-${product.id}" class="form-control mb-2" placeholder="Bulk Quantity" value="1" min="1" />
+                                <button class="btn btn-primary btn-sm" onclick="addToCart(${product.id})">Add to Cart</button>
+                            </div>
+                        </div>`;
                 productContainer.innerHTML += productCard;
             });
         }
@@ -270,16 +292,16 @@
                 totalQuantity += item.quantity;
                 cartList.innerHTML +=
                     `<li class="list-group-item d-flex justify-content-between align-items-center">
-                                    <div class="d-flex flex-column">
-                                        <span><strong>${item.name}</strong></span>
-                                        <span>₱${item.price.toFixed(2)} x ${item.quantity}</span>
-                                    </div>
-                                    <div>
-                                        <button class="btn btn-sm btn-outline-secondary" onclick="updateQuantity(${item.id}, -1)">-</button>
-                                        <span class="mx-2">${item.quantity}</span>
-                                        <button class="btn btn-sm btn-outline-secondary" onclick="updateQuantity(${item.id}, 1)">+</button>
-                                    </div>
-                                </li>`;
+                            <div class="d-flex flex-column">
+                                <span><strong>${item.name}</strong></span>
+                                <span>₱${item.price.toFixed(2)} x ${item.quantity}</span>
+                            </div>
+                            <div>
+                                <button class="btn btn-sm btn-outline-secondary" onclick="updateQuantity(${item.id}, -1)">-</button>
+                                <span class="mx-2">${item.quantity}</span>
+                                <button class="btn btn-sm btn-outline-secondary" onclick="updateQuantity(${item.id}, 1)">+</button>
+                            </div>
+                        </li>`;
             });
 
             document.getElementById("cart-total").textContent = `₱${total.toFixed(2)}`;
@@ -308,9 +330,9 @@
                 total += item.quantity * item.price;
                 cartItemsContainer.innerHTML +=
                     `<div class="d-flex justify-content-between align-items-center">
-                                    <span><strong>${item.name}</strong> (x${item.quantity})</span>
-                                    <span>₱${(item.price * item.quantity).toFixed(2)}</span>
-                                </div>`;
+                            <span><strong>${item.name}</strong> (x${item.quantity})</span>
+                            <span>₱${(item.price * item.quantity).toFixed(2)}</span>
+                        </div>`;
             });
 
             reviewTotalPriceElement.textContent = total.toFixed(2);
@@ -345,7 +367,6 @@
             alert("You chose to pay with Cash!");
         });
 
-        
         document.getElementById("toggle-sidebar").addEventListener("click", function () {
             const sidebar = document.getElementById("sidebar");
             const mainContent = document.querySelector(".main-content");
