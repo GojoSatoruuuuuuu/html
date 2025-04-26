@@ -3,167 +3,560 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>POS Dashboard | Meogeo Sarang Korean Mart</title>
+    <title>My Account | Meogeo Sarang Korean Mart</title>
     <link rel="icon" type="image/png" href="/assets/icons/MSKM_Tab_Logo-32x32.png">
     <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0-alpha1/dist/css/bootstrap.min.css">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
     <style>
-        body {
-            background: #f8f9fa;
+        :root {
+            --primary-color: #3498db; /* Changed to blue */
+            --secondary-color: #f8c471;
+            --accent-color: #3498db;
+            --light-bg: #f9f9f9;
+            --dark-text: #2c3e50;
+            --light-text: #ecf0f1;
+            --card-shadow: 0 8px 16px rgba(0, 0, 0, 0.1);
         }
 
+        body {
+            background-color: var(--light-bg);
+            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+            color: var(--dark-text);
+        }
+
+        .page-container {
+            display: flex;
+            min-height: 100vh;
+        }
+
+        /* Sidebar Styling */
         .sidebar {
-            height: 100vh;
-            width: 200px;
+            background: linear-gradient(135deg, var(--primary-color), #2980b9); /* Changed to blue gradient */
+            width: 250px;
             position: fixed;
-            top: 0;
+            height: 100vh;
             left: 0;
-            transition: transform 0.3s, opacity 0.3s;
-            transform: translateX(0);
-            opacity: 1;
-            background: #2c3e50;
-            padding-top: 20px;
+            top: 0;
+            transition: all 0.3s ease;
+            box-shadow: 2px 0 10px rgba(0, 0, 0, 0.1);
+            z-index: 100;
         }
 
             .sidebar.hidden {
                 transform: translateX(-100%);
-                opacity: 0;
-                pointer-events: none;
             }
 
-        .toggle-button {
-            position: fixed;
-            top: 20px;
-            left: 220px;
-            font-size: 24px;
-            cursor: pointer;
-            z-index: 1000;
+        .logo-container {
+            padding: 20px 15px;
+            text-align: center;
+            border-bottom: 1px solid rgba(255, 255, 255, 0.1);
+        }
+
+            .logo-container h3 {
+                color: var(--light-text);
+                font-weight: 700;
+                margin-bottom: 0;
+                font-size: 1.3rem;
+            }
+
+        .nav-menu {
+            padding: 20px 0;
+        }
+
+        .nav-item {
+            padding: 0 15px;
+            margin-bottom: 5px;
         }
 
         .nav-link {
-            color: #ecf0f1;
-            transition: 0.3s;
-        }
-
-            .nav-link:hover {
-                color: #1abc9c;
-            }
-
-        .main-content {
-            padding: 2rem;
-            margin-left: 220px;
-            width: calc(100% - 220px);
-            transition: margin-left 0.3s;
-        }
-
-        .sidebar.hidden + .main-content {
-            margin-left: 0;
-            width: 100%;
-        }
-
-        .dashboard-title {
-            font-size: 2.2rem;
-            font-weight: bold;
-            color: #2c3e50;
-            text-align: center;
-            margin-bottom: 1.5rem;
-        }
-
-        .dashboard-cards {
             display: flex;
-            flex-wrap: wrap;
-            justify-content: center;
-            gap: 1rem;
+            align-items: center;
+            color: var(--light-text);
+            padding: 12px 15px;
+            border-radius: 8px;
+            transition: all 0.3s ease;
+            text-decoration: none;
         }
 
-        .card {
-            background: white;
-            border-radius: 10px;
-            box-shadow: 0px 4px 8px rgba(0, 0, 0, 0.1);
-            flex: 1 1 280px;
-            max-width: 320px;
-            text-align: center;
-            transition: transform 0.2s ease-in-out;
-        }
-
-            .card:hover {
-                transform: translateY(-5px);
+            .nav-link i {
+                margin-right: 10px;
+                font-size: 18px;
             }
 
-        .card-header {
-            background: #1abc9c;
-            color: white;
-            font-weight: bold;
-            padding: 10px;
-            border-radius: 10px 10px 0 0;
-        }
-
-        .card-body {
-            padding: 15px;
-        }
+            .nav-link:hover, .nav-link.active {
+                background-color: rgba(255, 255, 255, 0.15);
+                color: var(--light-text);
+            }
 
         .sign-out-btn {
             position: absolute;
             bottom: 20px;
-            left: 50%;
-            transform: translateX(-50%);
-            background-color: #e74c3c;
-            color: white;
-            padding: 10px 20px;
+            left: 20px;
+            right: 20px;
+            background-color: rgba(255, 255, 255, 0.2);
+            color: var(--light-text);
             border: none;
-            border-radius: 5px;
+            padding: 10px;
+            border-radius: 8px;
             cursor: pointer;
-            font-size: 16px;
-            transition: background-color 0.3s;
+            transition: all 0.3s ease;
+            display: flex;
+            align-items: center;
+            justify-content: center;
         }
 
-            .sign-out-btn:hover {
-                background-color: #c0392b;
+            .sign-out-btn i {
+                margin-right: 8px;
             }
+
+            .sign-out-btn:hover {
+                background-color: rgba(255, 255, 255, 0.3);
+            }
+
+        /* Main Content Styling */
+        .main-content {
+            flex: 1;
+            padding: 25px;
+            margin-left: 250px;
+            transition: margin-left 0.3s ease;
+        }
+
+        .sidebar.hidden + .main-content {
+            margin-left: 0;
+        }
+
+        .toggle-button {
+            position: fixed;
+            top: 25px;
+            left: 265px;
+            background-color: var(--primary-color);
+            color: white;
+            border: none;
+            width: 40px;
+            height: 40px;
+            border-radius: 50%;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            cursor: pointer;
+            z-index: 101;
+            box-shadow: 0 2px 5px rgba(0, 0, 0, 0.2);
+            transition: all 0.3s ease;
+        }
+
+            .toggle-button.shifted {
+                left: 15px;
+            }
+
+        /* Header Section - Fixed position issue */
+        .dashboard-header {
+            margin-bottom: 30px;
+            padding-top: 20px; /* Added space for toggle button */
+        }
+
+        .welcome-message h1 {
+            font-size: 1.8rem;
+            font-weight: 700;
+            margin-bottom: 10px;
+        }
+
+        .welcome-message p {
+            color: #7f8c8d;
+            font-size: 1rem;
+        }
+
+        /* Cards Styling */
+        .dashboard-cards {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(300px, 1fr));
+            gap: 25px;
+            margin-bottom: 30px;
+        }
+
+        .card {
+            border: none;
+            border-radius: 15px;
+            box-shadow: var(--card-shadow);
+            overflow: hidden;
+            transition: transform 0.3s ease, box-shadow 0.3s ease;
+        }
+
+            .card:hover {
+                transform: translateY(-5px);
+                box-shadow: 0 12px 20px rgba(0, 0, 0, 0.15);
+            }
+
+        .card-header {
+            background-color: var(--accent-color);
+            color: white;
+            font-weight: 600;
+            font-size: 1.2rem;
+            padding: 15px 20px;
+            border-bottom: none;
+        }
+
+        .recent-header {
+            background-color: var(--accent-color);
+        }
+
+        .favorite-header {
+            background-color: var(--secondary-color);
+            color: var(--dark-text);
+        }
+
+        .recommendations-header {
+            background-color: var(--primary-color);
+        }
+
+        .card-body {
+            padding: 20px;
+        }
+
+        .purchase-item {
+            display: flex;
+            align-items: center;
+            margin-bottom: 15px;
+            padding-bottom: 15px;
+            border-bottom: 1px solid #eee;
+        }
+
+            .purchase-item:last-child {
+                margin-bottom: 0;
+                padding-bottom: 0;
+                border-bottom: none;
+            }
+
+        .purchase-img {
+            width: 50px;
+            height: 50px;
+            border-radius: 8px;
+            object-fit: cover;
+            margin-right: 15px;
+            background-color: #eee;
+        }
+
+        .purchase-info h5 {
+            font-size: 1rem;
+            margin-bottom: 5px;
+            font-weight: 600;
+        }
+
+        .purchase-info p {
+            color: #7f8c8d;
+            margin-bottom: 0;
+            font-size: 0.9rem;
+        }
+
+        .favorite-item {
+            display: flex;
+            align-items: center;
+            margin-bottom: 15px;
+            padding-bottom: 15px;
+            border-bottom: 1px solid #eee;
+        }
+
+            .favorite-item:last-child {
+                margin-bottom: 0;
+                padding-bottom: 0;
+                border-bottom: none;
+            }
+
+        .product-card {
+            display: flex;
+            align-items: center;
+            padding: 15px;
+            border-radius: 10px;
+            transition: all 0.3s ease;
+            margin-bottom: 15px;
+            background-color: #f8f9fa;
+        }
+
+            .product-card:hover {
+                background-color: #e9ecef;
+            }
+
+        .product-img {
+            width: 60px;
+            height: 60px;
+            border-radius: 8px;
+            margin-right: 15px;
+            background-color: #ddd;
+        }
+
+        .product-details h5 {
+            font-size: 1rem;
+            margin-bottom: 5px;
+        }
+
+        .product-details .price {
+            font-weight: bold;
+            color: var(--primary-color);
+        }
+
+        .btn-add {
+            background-color: var(--primary-color);
+            color: white;
+            border: none;
+            border-radius: 5px;
+            padding: 5px 10px;
+            font-size: 0.8rem;
+            cursor: pointer;
+            transition: all 0.3s ease;
+        }
+
+            .btn-add:hover {
+                background-color: #2980b9; /* Changed to darker blue */
+            }
+
+        /* Responsive Adjustments */
+        @media (max-width: 992px) {
+            .sidebar {
+                width: 220px;
+            }
+
+            .main-content {
+                margin-left: 220px;
+            }
+
+            .toggle-button {
+                left: 235px;
+            }
+        }
+
+        @media (max-width: 768px) {
+            .sidebar {
+                width: 240px;
+            }
+
+            .main-content {
+                margin-left: 0;
+                padding: 15px;
+            }
+
+            .sidebar:not(.hidden) + .main-content {
+                opacity: 0.3;
+                pointer-events: none;
+            }
+
+            .toggle-button {
+                left: 255px;
+            }
+
+            .dashboard-cards {
+                grid-template-columns: 1fr;
+            }
+        }
+
+        /* For proper badge display */
+        .badge {
+            padding: 5px 10px;
+            border-radius: 30px;
+            font-weight: 500;
+            font-size: 12px;
+        }
+
+        .badge-success {
+            background-color: #2ecc71;
+            color: white;
+        }
+
+        .badge-warning {
+            background-color: #f39c12;
+            color: white;
+        }
     </style>
 </head>
 <body>
-    <div class="d-flex">
-        <div id="sidebar" class="p-3 sidebar">
-            <nav class="nav flex-column text-center">
-                <a href="dashboard.html" class="nav-link active">Dashboard</a>
-                <a href="products.html" class="nav-link">Products</a>
-                <a href="transactions.html" class="nav-link">Transaction</a>
-                <a href="notifications.html" class="nav-link">Notification</a>
-                <a href="account.html" class="nav-link">Account</a>
-            </nav>
-            
-            <button class="sign-out-btn">Sign out</button>
+    <div class="page-container">
+        <!-- Sidebar -->
+        <div id="sidebar" class="sidebar">
+            <div class="logo-container">
+                <h3>Meogeo Sarang</h3>
+                <small style="color: var(--light-text)">Korean Mart</small>
+            </div>
+
+            <div class="nav-menu">
+                <div class="nav-item">
+                    <a href="dashboard.html" class="nav-link active">
+                        <i class="fas fa-home"></i>
+                        <span>Dashboard</span>
+                    </a>
+                </div>
+                <div class="nav-item">
+                    <a href="myorders.html" class="nav-link">
+                        <i class="fas fa-shopping-bag"></i>
+                        <span>My Orders</span>
+                    </a>
+                </div>
+                <div class="nav-item">
+                    <a href="favorites.html" class="nav-link">
+                        <i class="fas fa-heart"></i>
+                        <span>Favorites</span>
+                    </a>
+                </div>
+                <div class="nav-item">
+                    <a href="products.html" class="nav-link">
+                        <i class="fas fa-store"></i>
+                        <span>Products</span>
+                    </a>
+                </div>
+                <div class="nav-item">
+                    <a href="notifications.html" class="nav-link">
+                        <i class="fas fa-bell"></i>
+                        <span>Notifications</span>
+                    </a>
+                </div>
+                <div class="nav-item">
+                    <a href="Account.html" class="nav-link">
+                        <i class="fas fa-user"></i>
+                        <span>My Profile</span>
+                    </a>
+                </div>
+            </div>
+
+            <button class="sign-out-btn">
+                <i class="fas fa-sign-out-alt"></i>
+                <span>Sign Out</span>
+            </button>
         </div>
 
-        <div class="flex-grow-1 main-content">
-            <span id="toggle-sidebar" class="toggle-button">&#9776;</span>
-            <h1 class="dashboard-title">Dashboard</h1>
+        <!-- Main Content Area -->
+        <div class="main-content">
+            <button id="toggle-sidebar" class="toggle-button">
+                <i class="fas fa-bars"></i>
+            </button>
+
+            <div class="dashboard-header">
+                <div class="welcome-message">
+                    <h1>Welcome back, Jisoo!</h1>
+                    <p>Here's what's happening with your account today.</p>
+                </div>
+            </div>
+
             <div class="dashboard-cards">
                 <div class="card" id="recent-purchases">
-                    <div class="card-header">Recent Purchases</div>
-                    <div class="card-body" id="recent-purchase-details">
-                        <p>No recent purchases available.</p>
+                    <div class="card-header recent-header">
+                        <i class="fas fa-clock me-2"></i>Recent Purchases
+                    </div>
+                    <div class="card-body">
+                        <div class="purchase-item">
+                            <div class="purchase-img"></div>
+                            <div class="purchase-info">
+                                <h5>Shin Ramyun - 5 Pack</h5>
+                                <p>Purchased on April 3, 2025 · $8.99</p>
+                                <span class="badge badge-success">Delivered</span>
+                            </div>
+                        </div>
+                        <div class="purchase-item">
+                            <div class="purchase-img"></div>
+                            <div class="purchase-info">
+                                <h5>Korean Pears (3 ct)</h5>
+                                <p>Purchased on March 28, 2025 · $12.50</p>
+                                <span class="badge badge-success">Delivered</span>
+                            </div>
+                        </div>
+                        <div class="purchase-item">
+                            <div class="purchase-img"></div>
+                            <div class="purchase-info">
+                                <h5>Bibigo Mandu - Pork</h5>
+                                <p>Purchased on March 20, 2025 · $15.25</p>
+                                <span class="badge badge-success">Delivered</span>
+                            </div>
+                        </div>
                     </div>
                 </div>
+
                 <div class="card" id="favorite-items">
-                    <div class="card-header">Favorite Items</div>
+                    <div class="card-header favorite-header">
+                        <i class="fas fa-heart me-2"></i>Favorite Items
+                    </div>
                     <div class="card-body">
-                        <p>Check out your favorite items here.</p>
+                        <div class="favorite-item">
+                            <div class="purchase-img"></div>
+                            <div class="purchase-info">
+                                <h5>Choco Pie Original</h5>
+                                <p>$5.99 · <a href="#" class="text-primary">Buy Again</a></p>
+                            </div>
+                        </div>
+                        <div class="favorite-item">
+                            <div class="purchase-img"></div>
+                            <div class="purchase-info">
+                                <h5>Kimchi (16oz)</h5>
+                                <p>$8.50 · <a href="#" class="text-primary">Buy Again</a></p>
+                            </div>
+                        </div>
+                        <div class="favorite-item">
+                            <div class="purchase-img"></div>
+                            <div class="purchase-info">
+                                <h5>Soju - Original</h5>
+                                <p>$6.99 · <a href="#" class="text-primary">Buy Again</a></p>
+                            </div>
+                        </div>
                     </div>
                 </div>
+
                 <div class="card" id="recommendations">
-                    <div class="card-header">Recommendations</div>
+                    <div class="card-header recommendations-header">
+                        <i class="fas fa-star me-2"></i>Recommendations
+                    </div>
                     <div class="card-body">
-                        <p>Get recommendations tailored for you.</p>
+                        <div class="product-card">
+                            <div class="product-img"></div>
+                            <div class="product-details">
+                                <h5>Tteokbokki Set</h5>
+                                <p class="mb-1">Perfect for a quick dinner</p>
+                                <span class="price">$12.99</span>
+                                <button class="btn-add ms-2">Add to Cart</button>
+                            </div>
+                        </div>
+                        <div class="product-card">
+                            <div class="product-img"></div>
+                            <div class="product-details">
+                                <h5>Honey Butter Chip</h5>
+                                <p class="mb-1">Best-selling snack</p>
+                                <span class="price">$4.50</span>
+                                <button class="btn-add ms-2">Add to Cart</button>
+                            </div>
+                        </div>
+                        <div class="product-card">
+                            <div class="product-img"></div>
+                            <div class="product-details">
+                                <h5>Banchan Set</h5>
+                                <p class="mb-1">Fresh daily side dishes</p>
+                                <span class="price">$18.99</span>
+                                <button class="btn-add ms-2">Add to Cart</button>
+                            </div>
+                        </div>
                     </div>
                 </div>
             </div>
         </div>
     </div>
+
     <script>
-        document.getElementById('toggle-sidebar').addEventListener('click', function () {
-            document.getElementById('sidebar').classList.toggle('hidden');
+        // Toggle sidebar functionality
+        const toggleBtn = document.getElementById('toggle-sidebar');
+        const sidebar = document.getElementById('sidebar');
+
+        toggleBtn.addEventListener('click', function () {
+            sidebar.classList.toggle('hidden');
+            this.classList.toggle('shifted');
         });
+
+        // Responsive behavior for mobile
+        function checkWindowSize() {
+            if (window.innerWidth <= 768) {
+                sidebar.classList.add('hidden');
+                toggleBtn.classList.add('shifted');
+            } else {
+                sidebar.classList.remove('hidden');
+                toggleBtn.classList.remove('shifted');
+            }
+        }
+
+        // Run on page load and resize
+        window.addEventListener('load', checkWindowSize);
+        window.addEventListener('resize', checkWindowSize);
     </script>
 </body>
 </html>

@@ -1,0 +1,814 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>My Orders | Meogeo Sarang Korean Mart</title>
+    <link rel="icon" type="image/png" href="/assets/icons/MSKM_Tab_Logo-32x32.png">
+    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0-alpha1/dist/css/bootstrap.min.css">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+    <style>
+        :root {
+            --primary-color: #3498db;
+            --secondary-color: #f8c471;
+            --accent-color: #3498db;
+            --light-bg: #f9f9f9;
+            --dark-text: #2c3e50;
+            --light-text: #ecf0f1;
+            --card-shadow: 0 8px 16px rgba(0, 0, 0, 0.1);
+        }
+
+        body {
+            background-color: var(--light-bg);
+            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+            color: var(--dark-text);
+        }
+
+        .page-container {
+            display: flex;
+            min-height: 100vh;
+        }
+
+        /* Sidebar Styling */
+        .sidebar {
+            background: linear-gradient(135deg, var(--primary-color), #2980b9);
+            width: 250px;
+            position: fixed;
+            height: 100vh;
+            left: 0;
+            top: 0;
+            transition: all 0.3s ease;
+            box-shadow: 2px 0 10px rgba(0, 0, 0, 0.1);
+            z-index: 100;
+        }
+
+            .sidebar.hidden {
+                transform: translateX(-100%);
+            }
+
+        .logo-container {
+            padding: 20px 15px;
+            text-align: center;
+            border-bottom: 1px solid rgba(255, 255, 255, 0.1);
+        }
+
+            .logo-container h3 {
+                color: var(--light-text);
+                font-weight: 700;
+                margin-bottom: 0;
+                font-size: 1.3rem;
+            }
+
+        .nav-menu {
+            padding: 20px 0;
+        }
+
+        .nav-item {
+            padding: 0 15px;
+            margin-bottom: 5px;
+        }
+
+        .nav-link {
+            display: flex;
+            align-items: center;
+            color: var(--light-text);
+            padding: 12px 15px;
+            border-radius: 8px;
+            transition: all 0.3s ease;
+            text-decoration: none;
+        }
+
+            .nav-link i {
+                margin-right: 10px;
+                font-size: 18px;
+            }
+
+            .nav-link:hover, .nav-link.active {
+                background-color: rgba(255, 255, 255, 0.15);
+                color: var(--light-text);
+            }
+
+        .sign-out-btn {
+            position: absolute;
+            bottom: 20px;
+            left: 20px;
+            right: 20px;
+            background-color: rgba(255, 255, 255, 0.2);
+            color: var(--light-text);
+            border: none;
+            padding: 10px;
+            border-radius: 8px;
+            cursor: pointer;
+            transition: all 0.3s ease;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+        }
+
+            .sign-out-btn i {
+                margin-right: 8px;
+            }
+
+            .sign-out-btn:hover {
+                background-color: rgba(255, 255, 255, 0.3);
+            }
+
+        /* Main Content Styling */
+        .main-content {
+            flex: 1;
+            padding: 25px;
+            margin-left: 250px;
+            transition: margin-left 0.3s ease;
+        }
+
+        .sidebar.hidden + .main-content {
+            margin-left: 0;
+        }
+
+        .toggle-button {
+            position: fixed;
+            top: 25px;
+            left: 265px;
+            background-color: var(--primary-color);
+            color: white;
+            border: none;
+            width: 40px;
+            height: 40px;
+            border-radius: 50%;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            cursor: pointer;
+            z-index: 101;
+            box-shadow: 0 2px 5px rgba(0, 0, 0, 0.2);
+            transition: all 0.3s ease;
+        }
+
+            .toggle-button.shifted {
+                left: 15px;
+            }
+
+        /* Header Section */
+        .orders-header {
+            margin-bottom: 30px;
+            padding-top: 20px;
+        }
+
+        .section-title h1 {
+            font-size: 1.8rem;
+            font-weight: 700;
+            margin-bottom: 10px;
+        }
+
+        .section-title p {
+            color: #7f8c8d;
+            font-size: 1rem;
+        }
+
+        /* Orders Filter Section */
+        .orders-filter {
+            display: flex;
+            align-items: center;
+            margin-bottom: 25px;
+            flex-wrap: wrap;
+            gap: 15px;
+        }
+
+        .filter-item {
+            padding: 8px 16px;
+            background-color: white;
+            border-radius: 20px;
+            box-shadow: 0 2px 5px rgba(0, 0, 0, 0.05);
+            cursor: pointer;
+            transition: all 0.3s ease;
+            font-size: 0.9rem;
+            border: 1px solid #eee;
+        }
+
+            .filter-item:hover {
+                box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
+            }
+
+            .filter-item.active {
+                background-color: var(--primary-color);
+                color: white;
+                border-color: var(--primary-color);
+            }
+
+        .search-box {
+            position: relative;
+            flex-grow: 1;
+            max-width: 300px;
+        }
+
+            .search-box input {
+                width: 100%;
+                padding: 10px 15px 10px 40px;
+                border-radius: 20px;
+                border: 1px solid #eee;
+                box-shadow: 0 2px 5px rgba(0, 0, 0, 0.05);
+                outline: none;
+                transition: all 0.3s ease;
+            }
+
+                .search-box input:focus {
+                    box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
+                    border-color: var(--primary-color);
+                }
+
+            .search-box i {
+                position: absolute;
+                left: 15px;
+                top: 50%;
+                transform: translateY(-50%);
+                color: #95a5a6;
+            }
+
+        /* Order Cards Styling */
+        .order-card {
+            background-color: white;
+            border-radius: 15px;
+            box-shadow: var(--card-shadow);
+            margin-bottom: 25px;
+            overflow: hidden;
+            transition: transform 0.3s ease, box-shadow 0.3s ease;
+        }
+
+            .order-card:hover {
+                transform: translateY(-5px);
+                box-shadow: 0 12px 20px rgba(0, 0, 0, 0.15);
+            }
+
+        .order-header {
+            padding: 20px;
+            background-color: #f8f9fa;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            border-bottom: 1px solid #eee;
+        }
+
+        .order-id {
+            font-weight: 600;
+            font-size: 1rem;
+        }
+
+        .order-date {
+            color: #7f8c8d;
+            font-size: 0.9rem;
+        }
+
+        .order-status {
+            font-size: 0.8rem;
+            padding: 5px 12px;
+            border-radius: 20px;
+            font-weight: 500;
+        }
+
+            .order-status.completed {
+                background-color: #2ecc71;
+                color: white;
+            }
+
+            .order-status.processing {
+                background-color: #f39c12;
+                color: white;
+            }
+
+            .order-status.shipped {
+                background-color: #3498db;
+                color: white;
+            }
+
+            .order-status.cancelled {
+                background-color: #e74c3c;
+                color: white;
+            }
+
+        .order-items {
+            padding: 20px;
+        }
+
+        .order-item {
+            display: flex;
+            margin-bottom: 15px;
+            padding-bottom: 15px;
+            border-bottom: 1px solid #eee;
+        }
+
+            .order-item:last-child {
+                margin-bottom: 0;
+                padding-bottom: 0;
+                border-bottom: none;
+            }
+
+        .item-img {
+            width: 70px;
+            height: 70px;
+            border-radius: 8px;
+            background-color: #eee;
+            margin-right: 15px;
+        }
+
+        .item-details {
+            flex-grow: 1;
+        }
+
+            .item-details h5 {
+                font-size: 1rem;
+                margin-bottom: 5px;
+                font-weight: 600;
+            }
+
+            .item-details .item-meta {
+                color: #7f8c8d;
+                font-size: 0.9rem;
+                margin-bottom: 5px;
+            }
+
+            .item-details .item-price {
+                font-weight: bold;
+                color: var(--primary-color);
+            }
+
+        .order-footer {
+            padding: 15px 20px;
+            background-color: #f8f9fa;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            border-top: 1px solid #eee;
+        }
+
+        .order-total {
+            font-weight: bold;
+            font-size: 1.1rem;
+        }
+
+        .order-actions button {
+            padding: 8px 15px;
+            border-radius: 5px;
+            font-size: 0.9rem;
+            margin-left: 10px;
+            cursor: pointer;
+            transition: all 0.3s ease;
+            border: none;
+        }
+
+        .btn-track {
+            background-color: var(--primary-color);
+            color: white;
+        }
+
+            .btn-track:hover {
+                background-color: #2980b9;
+            }
+
+        .btn-reorder {
+            background-color: var(--secondary-color);
+            color: var(--dark-text);
+        }
+
+            .btn-reorder:hover {
+                background-color: #f5b041;
+            }
+
+        /* Pagination */
+        .pagination-container {
+            display: flex;
+            justify-content: center;
+            margin-top: 30px;
+        }
+
+        .pagination {
+            display: flex;
+            list-style: none;
+            padding: 0;
+            margin: 0;
+        }
+
+            .pagination li {
+                margin: 0 5px;
+            }
+
+                .pagination li a {
+                    display: flex;
+                    align-items: center;
+                    justify-content: center;
+                    width: 40px;
+                    height: 40px;
+                    border-radius: 50%;
+                    background-color: white;
+                    box-shadow: 0 2px 5px rgba(0, 0, 0, 0.1);
+                    text-decoration: none;
+                    color: var(--dark-text);
+                    transition: all 0.3s ease;
+                }
+
+                    .pagination li a:hover {
+                        background-color: #f5f5f5;
+                    }
+
+                    .pagination li a.active {
+                        background-color: var(--primary-color);
+                        color: white;
+                    }
+
+        /* Responsive Adjustments */
+        @media (max-width: 992px) {
+            .sidebar {
+                width: 220px;
+            }
+
+            .main-content {
+                margin-left: 220px;
+            }
+
+            .toggle-button {
+                left: 235px;
+            }
+        }
+
+        @media (max-width: 768px) {
+            .sidebar {
+                width: 240px;
+            }
+
+            .main-content {
+                margin-left: 0;
+                padding: 15px;
+            }
+
+            .sidebar:not(.hidden) + .main-content {
+                opacity: 0.3;
+                pointer-events: none;
+            }
+
+            .toggle-button {
+                left: 255px;
+            }
+
+            .orders-filter {
+                flex-direction: column;
+                align-items: flex-start;
+            }
+
+            .search-box {
+                max-width: 100%;
+                width: 100%;
+            }
+
+            .order-header {
+                flex-direction: column;
+                align-items: flex-start;
+            }
+
+            .order-status-container {
+                margin-top: 10px;
+            }
+
+            .order-footer {
+                flex-direction: column;
+                align-items: flex-start;
+            }
+
+            .order-actions {
+                margin-top: 15px;
+                display: flex;
+                width: 100%;
+            }
+
+                .order-actions button {
+                    flex: 1;
+                    margin: 0 5px;
+                }
+        }
+    </style>
+</head>
+<body>
+    <div class="page-container">
+        <!-- Sidebar -->
+        <div id="sidebar" class="sidebar">
+            <div class="logo-container">
+                <h3>Meogeo Sarang</h3>
+                <small style="color: var(--light-text)">Korean Mart</small>
+            </div>
+
+            <div class="nav-menu">
+                <div class="nav-item">
+                    <a href="dashboard.html" class="nav-link">
+                        <i class="fas fa-home"></i>
+                        <span>Dashboard</span>
+                    </a>
+                </div>
+                <div class="nav-item">
+                    <a href="myorders.html" class="nav-link active">
+                        <i class="fas fa-shopping-bag"></i>
+                        <span>My Orders</span>
+                    </a>
+                </div>
+                <div class="nav-item">
+                    <a href="favorites.html" class="nav-link">
+                        <i class="fas fa-heart"></i>
+                        <span>Favorites</span>
+                    </a>
+                </div>
+                <div class="nav-item">
+                    <a href="products.html" class="nav-link">
+                        <i class="fas fa-store"></i>
+                        <span>Products</span>
+                    </a>
+                </div>
+                <div class="nav-item">
+                    <a href="notifications.html" class="nav-link">
+                        <i class="fas fa-bell"></i>
+                        <span>Notifications</span>
+                    </a>
+                </div>
+                <div class="nav-item">
+                    <a href="Account.html" class="nav-link">
+                        <i class="fas fa-user"></i>
+                        <span>My Profile</span>
+                    </a>
+                </div>
+            </div>
+
+            <button class="sign-out-btn">
+                <i class="fas fa-sign-out-alt"></i>
+                <span>Sign Out</span>
+            </button>
+        </div>
+
+        <!-- Main Content Area -->
+        <div class="main-content">
+            <button id="toggle-sidebar" class="toggle-button">
+                <i class="fas fa-bars"></i>
+            </button>
+
+            <div class="orders-header">
+                <div class="section-title">
+                    <h1>My Orders</h1>
+                    <p>Track and manage all your purchases</p>
+                </div>
+            </div>
+
+            <div class="orders-filter">
+                <div class="filter-item active">All Orders</div>
+                <div class="filter-item">Processing</div>
+                <div class="filter-item">Shipped</div>
+                <div class="filter-item">Delivered</div>
+                <div class="filter-item">Cancelled</div>
+                <div class="search-box">
+                    <i class="fas fa-search"></i>
+                    <input type="text" placeholder="Search orders...">
+                </div>
+            </div>
+
+            <div class="orders-list">
+                <!-- Order 1 -->
+                <div class="order-card">
+                    <div class="order-header">
+                        <div>
+                            <div class="order-id">Order #KM78932</div>
+                            <div class="order-date">April 3, 2025</div>
+                        </div>
+                        <div class="order-status-container">
+                            <span class="order-status completed">Delivered</span>
+                        </div>
+                    </div>
+                    <div class="order-items">
+                        <div class="order-item">
+                            <div class="item-img"></div>
+                            <div class="item-details">
+                                <h5>Shin Ramyun - 5 Pack</h5>
+                                <div class="item-meta">Quantity: 1</div>
+                                <div class="item-price">$8.99</div>
+                            </div>
+                        </div>
+                        <div class="order-item">
+                            <div class="item-img"></div>
+                            <div class="item-details">
+                                <h5>Samyang Hot Chicken Ramen</h5>
+                                <div class="item-meta">Quantity: 2</div>
+                                <div class="item-price">$12.98</div>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="order-footer">
+                        <div class="order-total">Total: $21.97</div>
+                        <div class="order-actions">
+                            <button class="btn-reorder">Buy Again</button>
+                            <button class="btn-track">View Details</button>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- Order 2 -->
+                <div class="order-card">
+                    <div class="order-header">
+                        <div>
+                            <div class="order-id">Order #KM78651</div>
+                            <div class="order-date">March 28, 2025</div>
+                        </div>
+                        <div class="order-status-container">
+                            <span class="order-status completed">Delivered</span>
+                        </div>
+                    </div>
+                    <div class="order-items">
+                        <div class="order-item">
+                            <div class="item-img"></div>
+                            <div class="item-details">
+                                <h5>Korean Pears (3 ct)</h5>
+                                <div class="item-meta">Quantity: 1</div>
+                                <div class="item-price">$12.50</div>
+                            </div>
+                        </div>
+                        <div class="order-item">
+                            <div class="item-img"></div>
+                            <div class="item-details">
+                                <h5>Korean Red Ginseng Tea</h5>
+                                <div class="item-meta">Quantity: 1</div>
+                                <div class="item-price">$15.99</div>
+                            </div>
+                        </div>
+                        <div class="order-item">
+                            <div class="item-img"></div>
+                            <div class="item-details">
+                                <h5>Brown Rice Green Tea</h5>
+                                <div class="item-meta">Quantity: 2</div>
+                                <div class="item-price">$9.98</div>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="order-footer">
+                        <div class="order-total">Total: $38.47</div>
+                        <div class="order-actions">
+                            <button class="btn-reorder">Buy Again</button>
+                            <button class="btn-track">View Details</button>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- Order 3 -->
+                <div class="order-card">
+                    <div class="order-header">
+                        <div>
+                            <div class="order-id">Order #KM78402</div>
+                            <div class="order-date">March 20, 2025</div>
+                        </div>
+                        <div class="order-status-container">
+                            <span class="order-status completed">Delivered</span>
+                        </div>
+                    </div>
+                    <div class="order-items">
+                        <div class="order-item">
+                            <div class="item-img"></div>
+                            <div class="item-details">
+                                <h5>Bibigo Mandu - Pork</h5>
+                                <div class="item-meta">Quantity: 1</div>
+                                <div class="item-price">$15.25</div>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="order-footer">
+                        <div class="order-total">Total: $15.25</div>
+                        <div class="order-actions">
+                            <button class="btn-reorder">Buy Again</button>
+                            <button class="btn-track">View Details</button>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- Order 4 (Processing) -->
+                <div class="order-card">
+                    <div class="order-header">
+                        <div>
+                            <div class="order-id">Order #KM79103</div>
+                            <div class="order-date">April 10, 2025</div>
+                        </div>
+                        <div class="order-status-container">
+                            <span class="order-status processing">Processing</span>
+                        </div>
+                    </div>
+                    <div class="order-items">
+                        <div class="order-item">
+                            <div class="item-img"></div>
+                            <div class="item-details">
+                                <h5>Kimchi Premium (32oz)</h5>
+                                <div class="item-meta">Quantity: 1</div>
+                                <div class="item-price">$14.99</div>
+                            </div>
+                        </div>
+                        <div class="order-item">
+                            <div class="item-img"></div>
+                            <div class="item-details">
+                                <h5>Gochujang Paste</h5>
+                                <div class="item-meta">Quantity: 1</div>
+                                <div class="item-price">$8.75</div>
+                            </div>
+                        </div>
+                        <div class="order-item">
+                            <div class="item-img"></div>
+                            <div class="item-details">
+                                <h5>Korean Seaweed Snack Pack</h5>
+                                <div class="item-meta">Quantity: 3</div>
+                                <div class="item-price">$5.97</div>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="order-footer">
+                        <div class="order-total">Total: $29.71</div>
+                        <div class="order-actions">
+                            <button class="btn-track">Track Order</button>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- Order 5 (Shipped) -->
+                <div class="order-card">
+                    <div class="order-header">
+                        <div>
+                            <div class="order-id">Order #KM79045</div>
+                            <div class="order-date">April 8, 2025</div>
+                        </div>
+                        <div class="order-status-container">
+                            <span class="order-status shipped">Shipped</span>
+                        </div>
+                    </div>
+                    <div class="order-items">
+                        <div class="order-item">
+                            <div class="item-img"></div>
+                            <div class="item-details">
+                                <h5>Melona Ice Cream - Mango</h5>
+                                <div class="item-meta">Quantity: 2</div>
+                                <div class="item-price">$11.98</div>
+                            </div>
+                        </div>
+                        <div class="order-item">
+                            <div class="item-img"></div>
+                            <div class="item-details">
+                                <h5>Binggrae Banana Milk</h5>
+                                <div class="item-meta">Quantity: 6</div>
+                                <div class="item-price">$10.74</div>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="order-footer">
+                        <div class="order-total">Total: $22.72</div>
+                        <div class="order-actions">
+                            <button class="btn-track">Track Order</button>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Pagination -->
+            <div class="pagination-container">
+                <ul class="pagination">
+                    <li><a href="#"><i class="fas fa-angle-left"></i></a></li>
+                    <li><a href="#" class="active">1</a></li>
+                    <li><a href="#">2</a></li>
+                    <li><a href="#">3</a></li>
+                    <li><a href="#"><i class="fas fa-angle-right"></i></a></li>
+                </ul>
+            </div>
+        </div>
+    </div>
+
+    <script>
+        // Toggle sidebar functionality
+        const toggleBtn = document.getElementById('toggle-sidebar');
+        const sidebar = document.getElementById('sidebar');
+
+        toggleBtn.addEventListener('click', function () {
+            sidebar.classList.toggle('hidden');
+            this.classList.toggle('shifted');
+        });
+
+        // Responsive behavior for mobile
+        function checkWindowSize() {
+            if (window.innerWidth <= 768) {
+                sidebar.classList.add('hidden');
+                toggleBtn.classList.add('shifted');
+            } else {
+                sidebar.classList.remove('hidden');
+                toggleBtn.classList.remove('shifted');
+            }
+        }
+
+        // Run on page load and resize
+        window.addEventListener('load', checkWindowSize);
+        window.addEventListener('resize', checkWindowSize);
+
+        // Filter functionality
+        const filterItems = document.querySelectorAll('.filter-item');
+        filterItems.forEach(item => {
+            item.addEventListener('click', function() {
+                filterItems.forEach(i => i.classList.remove('active'));
+                this.classList.add('active');
+                // Add actual filtering functionality here
+            });
+        });
+    </script>
+</body>
+</html>

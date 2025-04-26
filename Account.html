@@ -3,178 +3,562 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>POS | Meogeo Sarang Korean Mart - Customer Account</title>
+    <title>My Account | Meogeo Sarang Korean Mart</title>
     <link rel="icon" type="image/png" href="/assets/icons/MSKM_Tab_Logo-32x32.png">
     <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0-alpha1/dist/css/bootstrap.min.css">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
     <style>
-        body {
-            background: #f8f9fa;
+        :root {
+            --primary-color: #3498db;
+            --primary-dark: #2980b9;
+            --secondary-color: #f8c471;
+            --accent-color: #3498db;
+            --light-bg: #f9f9f9;
+            --dark-text: #2c3e50;
+            --light-text: #ecf0f1;
+            --card-shadow: 0 8px 16px rgba(0, 0, 0, 0.1);
+            --card-border-radius: 15px;
+            --input-border-radius: 8px;
         }
 
+        body {
+            background-color: var(--light-bg);
+            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+            color: var(--dark-text);
+        }
+
+        .page-container {
+            display: flex;
+            min-height: 100vh;
+        }
+
+        /* Sidebar Styling */
         .sidebar {
-            height: 100vh;
-            width: 200px;
+            background: linear-gradient(135deg, var(--primary-color), var(--primary-dark));
+            width: 250px;
             position: fixed;
-            top: 0;
+            height: 100vh;
             left: 0;
-            transition: transform 0.3s, opacity 0.3s;
-            transform: translateX(0);
-            opacity: 1;
-            background: #2c3e50;
-            padding-top: 20px;
+            top: 0;
+            transition: all 0.3s ease;
+            box-shadow: 2px 0 10px rgba(0, 0, 0, 0.1);
+            z-index: 100;
         }
 
             .sidebar.hidden {
                 transform: translateX(-100%);
-                opacity: 0;
-                pointer-events: none;
             }
 
-        .toggle-button {
-            position: fixed;
-            top: 20px;
-            left: 220px;
-            font-size: 24px;
-            cursor: pointer;
-            z-index: 1000;
+        .logo-container {
+            padding: 20px 15px;
+            text-align: center;
+            border-bottom: 1px solid rgba(255, 255, 255, 0.1);
+        }
+
+            .logo-container h3 {
+                color: var(--light-text);
+                font-weight: 700;
+                margin-bottom: 0;
+                font-size: 1.3rem;
+            }
+
+        .nav-menu {
+            padding: 20px 0;
+        }
+
+        .nav-item {
+            padding: 0 15px;
+            margin-bottom: 5px;
         }
 
         .nav-link {
-            color: #ecf0f1;
-            transition: 0.3s;
+            display: flex;
+            align-items: center;
+            color: var(--light-text);
+            padding: 12px 15px;
+            border-radius: 8px;
+            transition: all 0.3s ease;
+            text-decoration: none;
         }
 
-            .nav-link:hover {
-                color: #1abc9c;
+            .nav-link i {
+                margin-right: 10px;
+                font-size: 18px;
             }
 
-        .accountBody {
-            padding: 2rem;
-            margin-left: 220px;
-            width: calc(100% - 220px);
-            transition: margin-left 0.3s;
-        }
-
-        .sidebar.hidden + .accountBody {
-            margin-left: 0;
-            width: 100%;
-        }
-
-        .account-title {
-            font-size: 2.5rem;
-            font-weight: bold;
-            color: #2c3e50;
-            text-align: center;
-            border-bottom: 2px solid #ddd;
-            padding-bottom: 0.5rem;
-            margin-bottom: 1.5rem;
-        }
-
-        .account-card {
-            background: #ffffff;
-            border-radius: 12px;
-            padding: 20px;
-            margin-bottom: 20px;
-            box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
-        }
+            .nav-link:hover, .nav-link.active {
+                background-color: rgba(255, 255, 255, 0.15);
+                color: var(--light-text);
+            }
 
         .sign-out-btn {
             position: absolute;
             bottom: 20px;
-            left: 50%;
-            transform: translateX(-50%);
-            background-color: #e74c3c;
-            color: white;
-            padding: 10px 20px;
+            left: 20px;
+            right: 20px;
+            background-color: rgba(255, 255, 255, 0.2);
+            color: var(--light-text);
             border: none;
-            border-radius: 5px;
+            padding: 10px;
+            border-radius: 8px;
             cursor: pointer;
-            font-size: 16px;
-            transition: background-color 0.3s;
+            transition: all 0.3s ease;
+            display: flex;
+            align-items: center;
+            justify-content: center;
         }
 
-            .sign-out-btn:hover {
-                background-color: #c0392b;
+            .sign-out-btn i {
+                margin-right: 8px;
             }
+
+            .sign-out-btn:hover {
+                background-color: rgba(255, 255, 255, 0.3);
+            }
+
+        /* Main Content Styling */
+        .main-content {
+            flex: 1;
+            padding: 25px;
+            margin-left: 250px;
+            transition: margin-left 0.3s ease;
+        }
+
+        .sidebar.hidden + .main-content {
+            margin-left: 0;
+        }
+
+        .toggle-button {
+            position: fixed;
+            top: 25px;
+            left: 265px;
+            background-color: var(--primary-color);
+            color: white;
+            border: none;
+            width: 40px;
+            height: 40px;
+            border-radius: 50%;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            cursor: pointer;
+            z-index: 101;
+            box-shadow: 0 2px 5px rgba(0, 0, 0, 0.2);
+            transition: all 0.3s ease;
+        }
+
+            .toggle-button.shifted {
+                left: 15px;
+            }
+
+        /* Header Section */
+        .account-header {
+            margin-bottom: 30px;
+            padding-top: 20px;
+        }
+
+        .account-title {
+            font-size: 1.8rem;
+            font-weight: 700;
+            color: var(--dark-text);
+            margin-bottom: 10px;
+            display: flex;
+            align-items: center;
+        }
+
+            .account-title i {
+                margin-right: 10px;
+                color: var(--primary-color);
+            }
+
+        .account-subtitle {
+            color: #7f8c8d;
+            font-size: 1rem;
+            margin-bottom: 30px;
+        }
+
+        /* Account Cards */
+        .account-card {
+            background: #ffffff;
+            border-radius: var(--card-border-radius);
+            padding: 25px;
+            margin-bottom: 25px;
+            box-shadow: var(--card-shadow);
+            transition: transform 0.3s ease, box-shadow 0.3s ease;
+        }
+
+            .account-card:hover {
+                transform: translateY(-5px);
+                box-shadow: 0 12px 20px rgba(0, 0, 0, 0.15);
+            }
+
+            .account-card h4 {
+                color: var(--dark-text);
+                font-size: 1.2rem;
+                font-weight: 600;
+                margin-bottom: 20px;
+                display: flex;
+                align-items: center;
+            }
+
+                .account-card h4 i {
+                    margin-right: 10px;
+                    color: var(--primary-color);
+                }
+
+        /* Form Styling */
+        .form-label {
+            font-weight: 500;
+            color: var(--dark-text);
+            margin-bottom: 8px;
+        }
+
+        .form-control {
+            border-radius: var(--input-border-radius);
+            border: 1px solid #e0e0e0;
+            padding: 10px 15px;
+            transition: all 0.3s ease;
+        }
+
+            .form-control:focus {
+                border-color: var(--primary-color);
+                box-shadow: 0 0 0 0.25rem rgba(52, 152, 219, 0.25);
+            }
+
+        .form-check-input:checked {
+            background-color: var(--primary-color);
+            border-color: var(--primary-color);
+        }
+
+        /* Button Styling */
+        .btn {
+            padding: 10px 20px;
+            border-radius: 8px;
+            font-weight: 500;
+            transition: all 0.3s ease;
+        }
+
+        .btn-primary {
+            background-color: var(--primary-color);
+            border-color: var(--primary-color);
+        }
+
+            .btn-primary:hover {
+                background-color: var(--primary-dark);
+                border-color: var(--primary-dark);
+            }
+
+        .btn-warning {
+            background-color: #f39c12;
+            border-color: #f39c12;
+        }
+
+            .btn-warning:hover {
+                background-color: #e67e22;
+                border-color: #e67e22;
+            }
+
+        .btn-secondary {
+            background-color: #7f8c8d;
+            border-color: #7f8c8d;
+        }
+
+            .btn-secondary:hover {
+                background-color: #6c7a7d;
+                border-color: #6c7a7d;
+            }
+
+        .btn-outline-primary {
+            color: var(--primary-color);
+            border-color: var(--primary-color);
+        }
+
+            .btn-outline-primary:hover {
+                background-color: var(--primary-color);
+                color: white;
+            }
+
+        /* Action buttons */
+        .action-buttons {
+            display: flex;
+            justify-content: space-between;
+            gap: 10px;
+        }
+
+            .action-buttons .btn {
+                flex: 1;
+            }
+
+        /* Responsive Adjustments */
+        @media (max-width: 992px) {
+            .sidebar {
+                width: 220px;
+            }
+
+            .main-content {
+                margin-left: 220px;
+            }
+
+            .toggle-button {
+                left: 235px;
+            }
+        }
+
+        @media (max-width: 768px) {
+            .sidebar {
+                width: 240px;
+            }
+
+            .main-content {
+                margin-left: 0;
+                padding: 15px;
+            }
+
+            .sidebar:not(.hidden) + .main-content {
+                opacity: 0.3;
+                pointer-events: none;
+            }
+
+            .toggle-button {
+                left: 255px;
+            }
+
+            .account-header {
+                padding-top: 60px;
+            }
+
+            .action-buttons {
+                flex-direction: column;
+            }
+        }
     </style>
 </head>
 <body>
-    <div class="d-flex">
-        <div id="sidebar" class="p-3 sidebar">
-            <nav class="nav flex-column text-center">
-                <a href="dashboard.html" class="nav-link">Dashboard</a>
-                <a href="products.html" class="nav-link">Products</a>
-                <a href="transactions.html" class="nav-link">Transaction</a>
-                <a href="notifications.html" class="nav-link">Notification</a>
-                <a href="account.html" class="nav-link active">Account</a>
-            </nav>
+    <div class="page-container">
+        <!-- Sidebar -->
+        <div id="sidebar" class="sidebar">
+            <div class="logo-container">
+                <h3>Meogeo Sarang</h3>
+                <small style="color: var(--light-text)">Korean Mart</small>
+            </div>
 
-            
-            <button class="sign-out-btn">Sign out</button>
+            <div class="nav-menu">
+                <div class="nav-item">
+                    <a href="dashboard.html" class="nav-link">
+                        <i class="fas fa-home"></i>
+                        <span>Dashboard</span>
+                    </a>
+                </div>
+                <div class="nav-item">
+                    <a href="myorders.html" class="nav-link">
+                        <i class="fas fa-shopping-bag"></i>
+                        <span>My Orders</span>
+                    </a>
+                </div>
+                <div class="nav-item">
+                    <a href="favorites.html" class="nav-link">
+                        <i class="fas fa-heart"></i>
+                        <span>Favorites</span>
+                    </a>
+                </div>
+                <div class="nav-item">
+                    <a href="shop.html" class="nav-link">
+                        <i class="fas fa-store"></i>
+                        <span>Products</span>
+                    </a>
+                </div>
+                <div class="nav-item">
+                    <a href="notifications.html" class="nav-link">
+                        <i class="fas fa-bell"></i>
+                        <span>Notifications</span>
+                    </a>
+                </div>
+                <div class="nav-item">
+                    <a href="profile.html" class="nav-link active">
+                        <i class="fas fa-user"></i>
+                        <span>My Profile</span>
+                    </a>
+                </div>
+            </div>
+
+            <button class="sign-out-btn">
+                <i class="fas fa-sign-out-alt"></i>
+                <span>Sign Out</span>
+            </button>
         </div>
 
-        <div class="flex-grow-1 accountBody">
-            <span id="toggle-sidebar" class="toggle-button">&#9776;</span>
-            <h1 class="account-title">Customer Account</h1>
+        <!-- Main Content Area -->
+        <div class="main-content">
+            <button id="toggle-sidebar" class="toggle-button">
+                <i class="fas fa-bars"></i>
+            </button>
 
-            <div class="container">
-                <div class="row">
-                    <div class="col-md-6">
+            <div class="account-header">
+                <h1 class="account-title"><i class="fas fa-user-circle"></i> My Profile</h1>
+                <p class="account-subtitle">Manage your personal information and preferences</p>
+            </div>
+
+            <div class="container-fluid p-0">
+                <div class="row g-4">
+                    <div class="col-lg-6">
                         <div class="account-card">
-                            <h4>Personal Information</h4>
+                            <h4><i class="fas fa-id-card"></i> Personal Information</h4>
                             <form>
                                 <div class="mb-3">
                                     <label for="name" class="form-label">Full Name</label>
-                                    <input type="text" class="form-control" id="name" value="">
+                                    <input type="text" class="form-control" id="name" value="Jisoo Kim" placeholder="Enter your full name">
                                 </div>
                                 <div class="mb-3">
-                                    <label for="email" class="form-label">Email</label>
-                                    <input type="email" class="form-control" id="email" value="">
+                                    <label for="email" class="form-label">Email Address</label>
+                                    <input type="email" class="form-control" id="email" value="jisoo.kim@example.com" placeholder="Enter your email">
+                                </div>
+                                <div class="mb-3">
+                                    <label for="birthdate" class="form-label">Date of Birth</label>
+                                    <input type="date" class="form-control" id="birthdate" value="1995-01-03">
                                 </div>
                                 <button type="submit" class="btn btn-primary w-100">Update Information</button>
                             </form>
                         </div>
 
                         <div class="account-card">
-                            <h4>Change Password</h4>
+                            <h4><i class="fas fa-lock"></i> Security</h4>
                             <form>
                                 <div class="mb-3">
                                     <label for="current-password" class="form-label">Current Password</label>
-                                    <input type="password" class="form-control" id="current-password" required>
+                                    <input type="password" class="form-control" id="current-password" placeholder="Enter current password" required>
                                 </div>
                                 <div class="mb-3">
                                     <label for="new-password" class="form-label">New Password</label>
-                                    <input type="password" class="form-control" id="new-password" required>
+                                    <input type="password" class="form-control" id="new-password" placeholder="Enter new password" required>
+                                </div>
+                                <div class="mb-3">
+                                    <label for="confirm-password" class="form-label">Confirm New Password</label>
+                                    <input type="password" class="form-control" id="confirm-password" placeholder="Confirm new password" required>
+                                </div>
+                                <div class="mb-4">
+                                    <div class="form-check">
+                                        <input type="checkbox" class="form-check-input" id="two-factor">
+                                        <label class="form-check-label" for="two-factor">Enable two-factor authentication</label>
+                                    </div>
                                 </div>
                                 <button type="submit" class="btn btn-warning w-100">Change Password</button>
                             </form>
                         </div>
                     </div>
 
-                    <div class="col-md-6">
+                    <div class="col-lg-6">
                         <div class="account-card">
-                            <h4>Address Management</h4>
-                            <button class="btn btn-primary w-100 mt-2">Add New Address</button>
-                        </div>
-
-                        <div class="account-card">
-                            <h4>Payment Methods</h4>
-                            <button class="btn btn-primary w-100 mt-2">Add New Payment Method</button>
-                        </div>
-
-                        <div class="account-card">
-                            <h4>Notification Preferences</h4>
+                            <h4><i class="fas fa-address-book"></i> Contact Information</h4>
                             <form>
-                                <div class="form-check">
+                                <div class="mb-3">
+                                    <label for="phone" class="form-label">Phone Number</label>
+                                    <input type="tel" class="form-control" id="phone" value="(123) 456-7890" placeholder="Enter your phone number">
+                                </div>
+                                <div class="mb-3">
+                                    <label for="alternate-email" class="form-label">Alternate Email</label>
+                                    <input type="email" class="form-control" id="alternate-email" value="" placeholder="Enter alternate email (optional)">
+                                </div>
+                                <button type="submit" class="btn btn-primary w-100">Update Contact Information</button>
+                            </form>
+                        </div>
+
+                        <div class="account-card">
+                            <h4><i class="fas fa-map-marker-alt"></i> Delivery Addresses</h4>
+                            <div class="address-list mb-4">
+                                <div class="d-flex align-items-start border-bottom pb-3 mb-3">
+                                    <div class="flex-grow-1">
+                                        <h6 class="mb-1">Home Address <span class="badge bg-primary ms-2">Default</span></h6>
+                                        <p class="mb-0">123 Main Street, Apt 4B</p>
+                                        <p class="mb-0">Seoul, 04532</p>
+                                        <p class="mb-0">South Korea</p>
+                                    </div>
+                                    <div class="ms-3">
+                                        <a href="#" class="btn btn-sm btn-outline-primary mb-2"><i class="fas fa-edit"></i> Edit</a>
+                                        <a href="#" class="btn btn-sm btn-outline-danger"><i class="fas fa-trash"></i> Delete</a>
+                                    </div>
+                                </div>
+
+                                <div class="d-flex align-items-start">
+                                    <div class="flex-grow-1">
+                                        <h6 class="mb-1">Work Address</h6>
+                                        <p class="mb-0">456 Business Lane, Floor 8</p>
+                                        <p class="mb-0">Seoul, 05123</p>
+                                        <p class="mb-0">South Korea</p>
+                                    </div>
+                                    <div class="ms-3">
+                                        <a href="#" class="btn btn-sm btn-outline-primary mb-2"><i class="fas fa-edit"></i> Edit</a>
+                                        <a href="#" class="btn btn-sm btn-outline-danger"><i class="fas fa-trash"></i> Delete</a>
+                                    </div>
+                                </div>
+                            </div>
+                            <button class="btn btn-primary w-100"><i class="fas fa-plus"></i> Add New Address</button>
+                        </div>
+
+                        <div class="account-card">
+                            <h4><i class="fas fa-credit-card"></i> Payment Methods</h4>
+                            <div class="payment-list mb-4">
+                                <div class="d-flex align-items-center border-bottom pb-3 mb-3">
+                                    <div class="me-3">
+                                        <i class="fab fa-cc-visa fa-2x text-primary"></i>
+                                    </div>
+                                    <div class="flex-grow-1">
+                                        <h6 class="mb-0">Visa ending in 4242 <span class="badge bg-primary ms-2">Default</span></h6>
+                                        <small class="text-muted">Expires 12/27</small>
+                                    </div>
+                                    <div class="ms-2">
+                                        <a href="#" class="btn btn-sm btn-outline-danger"><i class="fas fa-trash"></i></a>
+                                    </div>
+                                </div>
+
+                                <div class="d-flex align-items-center">
+                                    <div class="me-3">
+                                        <i class="fab fa-cc-mastercard fa-2x text-primary"></i>
+                                    </div>
+                                    <div class="flex-grow-1">
+                                        <h6 class="mb-0">Mastercard ending in 8888</h6>
+                                        <small class="text-muted">Expires 09/26</small>
+                                    </div>
+                                    <div class="ms-2">
+                                        <a href="#" class="btn btn-sm btn-outline-danger"><i class="fas fa-trash"></i></a>
+                                    </div>
+                                </div>
+                            </div>
+                            <button class="btn btn-primary w-100"><i class="fas fa-plus"></i> Add New Payment Method</button>
+                        </div>
+
+                        <div class="account-card">
+                            <h4><i class="fas fa-bell"></i> Notification Preferences</h4>
+                            <form>
+                                <div class="form-check mb-3">
                                     <input type="checkbox" class="form-check-input" id="email-notifications" checked>
                                     <label class="form-check-label" for="email-notifications">Email Notifications</label>
+                                    <small class="form-text text-muted d-block">Receive updates about your orders and account</small>
                                 </div>
-                                <div class="form-check">
+                                <div class="form-check mb-3">
                                     <input type="checkbox" class="form-check-input" id="sms-notifications" checked>
                                     <label class="form-check-label" for="sms-notifications">SMS Notifications</label>
+                                    <small class="form-text text-muted d-block">Get text alerts for order updates and promotions</small>
                                 </div>
-                                <button type="submit" class="btn btn-secondary w-100 mt-2">Save Preferences</button>
+                                <div class="form-check mb-3">
+                                    <input type="checkbox" class="form-check-input" id="promo-notifications" checked>
+                                    <label class="form-check-label" for="promo-notifications">Promotional Emails</label>
+                                    <small class="form-text text-muted d-block">Stay updated with deals and new products</small>
+                                </div>
+                                <button type="submit" class="btn btn-primary w-100">Save Preferences</button>
                             </form>
+                        </div>
+                    </div>
+                </div>
+
+                <div class="row mt-4 mb-5">
+                    <div class="col-12">
+                        <div class="account-card">
+                            <h4><i class="fas fa-cog"></i> Account Actions</h4>
+                            <div class="action-buttons">
+                                <button class="btn btn-outline-primary"><i class="fas fa-file-download"></i> Download My Data</button>
+                                <button class="btn btn-outline-warning"><i class="fas fa-pause-circle"></i> Pause My Account</button>
+                                <button class="btn btn-outline-danger"><i class="fas fa-trash-alt"></i> Delete Account</button>
+                            </div>
                         </div>
                     </div>
                 </div>
@@ -183,10 +567,29 @@
     </div>
 
     <script>
-        document.getElementById('toggle-sidebar').addEventListener('click', function () {
-            document.getElementById('sidebar').classList.toggle('hidden');
-            document.querySelector('.accountBody').classList.toggle('expanded');
+        // Toggle sidebar functionality
+        const toggleBtn = document.getElementById('toggle-sidebar');
+        const sidebar = document.getElementById('sidebar');
+
+        toggleBtn.addEventListener('click', function () {
+            sidebar.classList.toggle('hidden');
+            this.classList.toggle('shifted');
         });
+
+        // Responsive behavior for mobile
+        function checkWindowSize() {
+            if (window.innerWidth <= 768) {
+                sidebar.classList.add('hidden');
+                toggleBtn.classList.add('shifted');
+            } else {
+                sidebar.classList.remove('hidden');
+                toggleBtn.classList.remove('shifted');
+            }
+        }
+
+        // Run on page load and resize
+        window.addEventListener('load', checkWindowSize);
+        window.addEventListener('resize', checkWindowSize);
     </script>
 </body>
 </html>

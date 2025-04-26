@@ -3,136 +3,771 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Notifications | POS System</title>
+    <title>Notifications | Meogeo Sarang Korean Mart</title>
+    <link rel="icon" type="image/png" href="/assets/icons/MSKM_Tab_Logo-32x32.png">
     <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0-alpha1/dist/css/bootstrap.min.css">
-    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.2/css/all.min.css">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
     <style>
-        body {
-            background: #f8f9fa;
+        :root {
+            --primary-color: #3498db;
+            --secondary-color: #f8c471;
+            --accent-color: #3498db;
+            --light-bg: #f9f9f9;
+            --dark-text: #2c3e50;
+            --light-text: #ecf0f1;
+            --card-shadow: 0 8px 16px rgba(0, 0, 0, 0.1);
         }
 
+        body {
+            background-color: var(--light-bg);
+            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+            color: var(--dark-text);
+        }
+
+        .page-container {
+            display: flex;
+            min-height: 100vh;
+        }
+
+        /* Sidebar Styling */
         .sidebar {
-            height: 100vh;
-            width: 200px;
+            background: linear-gradient(135deg, var(--primary-color), #2980b9);
+            width: 250px;
             position: fixed;
-            top: 0;
+            height: 100vh;
             left: 0;
-            transition: transform 0.3s, opacity 0.3s;
-            transform: translateX(0);
-            opacity: 1;
-            background: #2c3e50;
-            padding-top: 20px;
+            top: 0;
+            transition: all 0.3s ease;
+            box-shadow: 2px 0 10px rgba(0, 0, 0, 0.1);
+            z-index: 100;
         }
 
             .sidebar.hidden {
                 transform: translateX(-100%);
-                opacity: 0;
-                pointer-events: none;
             }
 
-        .toggle-button {
-            position: fixed;
-            top: 20px;
-            left: 220px;
-            font-size: 24px;
-            cursor: pointer;
-            z-index: 1000;
+        .logo-container {
+            padding: 20px 15px;
+            text-align: center;
+            border-bottom: 1px solid rgba(255, 255, 255, 0.1);
+        }
+
+            .logo-container h3 {
+                color: var(--light-text);
+                font-weight: 700;
+                margin-bottom: 0;
+                font-size: 1.3rem;
+            }
+
+        .nav-menu {
+            padding: 20px 0;
+        }
+
+        .nav-item {
+            padding: 0 15px;
+            margin-bottom: 5px;
         }
 
         .nav-link {
-            color: #ecf0f1;
-            transition: 0.3s;
+            display: flex;
+            align-items: center;
+            color: var(--light-text);
+            padding: 12px 15px;
+            border-radius: 8px;
+            transition: all 0.3s ease;
+            text-decoration: none;
         }
 
-            .nav-link:hover {
-                color: #1abc9c;
+            .nav-link i {
+                margin-right: 10px;
+                font-size: 18px;
             }
 
-        .main-content {
-            padding: 2rem;
-            margin-left: 220px;
-            width: calc(100% - 220px);
-            transition: margin-left 0.3s;
-        }
-
-        .sidebar.hidden + .main-content {
-            margin-left: 0;
-            width: 100%;
-        }
-
-        .notification-card {
-            background: white;
-            padding: 15px;
-            border-radius: 8px;
-            box-shadow: 0 0 10px rgba(0, 0, 0, 0.1);
-            margin-bottom: 15px;
-            transition: 0.3s;
-        }
-
-            .notification-card:hover {
-                transform: translateY(-3px);
+            .nav-link:hover, .nav-link.active {
+                background-color: rgba(255, 255, 255, 0.15);
+                color: var(--light-text);
             }
 
         .sign-out-btn {
             position: absolute;
             bottom: 20px;
-            left: 50%;
-            transform: translateX(-50%);
-            background-color: #e74c3c;
-            color: white;
-            padding: 10px 20px;
+            left: 20px;
+            right: 20px;
+            background-color: rgba(255, 255, 255, 0.2);
+            color: var(--light-text);
             border: none;
-            border-radius: 5px;
+            padding: 10px;
+            border-radius: 8px;
             cursor: pointer;
-            font-size: 16px;
-            transition: background-color 0.3s;
+            transition: all 0.3s ease;
+            display: flex;
+            align-items: center;
+            justify-content: center;
         }
 
-            .sign-out-btn:hover {
-                background-color: #c0392b;
+            .sign-out-btn i {
+                margin-right: 8px;
             }
+
+            .sign-out-btn:hover {
+                background-color: rgba(255, 255, 255, 0.3);
+            }
+
+        /* Main Content Styling */
+        .main-content {
+            flex: 1;
+            padding: 25px;
+            margin-left: 250px;
+            transition: margin-left 0.3s ease;
+        }
+
+        .sidebar.hidden + .main-content {
+            margin-left: 0;
+        }
+
+        .toggle-button {
+            position: fixed;
+            top: 25px;
+            left: 265px;
+            background-color: var(--primary-color);
+            color: white;
+            border: none;
+            width: 40px;
+            height: 40px;
+            border-radius: 50%;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            cursor: pointer;
+            z-index: 101;
+            box-shadow: 0 2px 5px rgba(0, 0, 0, 0.2);
+            transition: all 0.3s ease;
+        }
+
+            .toggle-button.shifted {
+                left: 15px;
+            }
+
+        /* Header Section */
+        .dashboard-header {
+            margin-bottom: 30px;
+            padding-top: 20px;
+        }
+
+        .welcome-message h1 {
+            font-size: 1.8rem;
+            font-weight: 700;
+            margin-bottom: 10px;
+        }
+
+        .welcome-message p {
+            color: #7f8c8d;
+            font-size: 1rem;
+        }
+
+        /* Filters Section */
+        .filters {
+            display: flex;
+            justify-content: space-between;
+            margin-bottom: 25px;
+            flex-wrap: wrap;
+            gap: 10px;
+        }
+
+        .filter-buttons {
+            display: flex;
+            gap: 10px;
+            flex-wrap: wrap;
+        }
+
+        .filter-btn {
+            background-color: white;
+            border: 1px solid #ddd;
+            padding: 8px 16px;
+            border-radius: 8px;
+            cursor: pointer;
+            transition: all 0.3s ease;
+            font-size: 14px;
+        }
+
+            .filter-btn.active {
+                background-color: var(--primary-color);
+                color: white;
+                border-color: var(--primary-color);
+            }
+
+        .refresh-btn {
+            display: flex;
+            align-items: center;
+            gap: 8px;
+            background-color: white;
+            border: 1px solid #ddd;
+            padding: 8px 16px;
+            border-radius: 8px;
+            cursor: pointer;
+            transition: all 0.3s ease;
+            color: var(--primary-color);
+        }
+
+            .refresh-btn:hover {
+                background-color: rgba(52, 152, 219, 0.1);
+            }
+
+        /* Notification Cards */
+        .notification-card {
+            background: white;
+            border-radius: 15px;
+            box-shadow: var(--card-shadow);
+            margin-bottom: 20px;
+            transition: all 0.3s ease;
+            position: relative;
+            border-left: 4px solid var(--primary-color);
+            padding: 20px;
+            cursor: pointer;
+        }
+
+            .notification-card:hover {
+                transform: translateY(-5px);
+                box-shadow: 0 12px 20px rgba(0, 0, 0, 0.15);
+            }
+
+            .notification-card.unread::after {
+                content: "";
+                position: absolute;
+                top: 20px;
+                right: 20px;
+                width: 10px;
+                height: 10px;
+                background-color: var(--primary-color);
+                border-radius: 50%;
+            }
+
+            .notification-card.payment {
+                border-left-color: var(--secondary-color);
+            }
+
+            .notification-card.alert {
+                border-left-color: #e74c3c;
+            }
+
+        .notification-header {
+            display: flex;
+            align-items: center;
+            margin-bottom: 15px;
+        }
+
+        .notification-icon {
+            background-color: rgba(52, 152, 219, 0.1);
+            color: var(--primary-color);
+            width: 45px;
+            height: 45px;
+            border-radius: 10px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            margin-right: 15px;
+            font-size: 1.3rem;
+        }
+
+        .notification-card.payment .notification-icon {
+            background-color: rgba(248, 196, 113, 0.2);
+            color: var(--secondary-color);
+        }
+
+        .notification-card.alert .notification-icon {
+            background-color: rgba(231, 76, 60, 0.1);
+            color: #e74c3c;
+        }
+
+        .notification-title {
+            font-weight: 600;
+            margin: 0;
+            font-size: 1.1rem;
+        }
+
+        .notification-meta {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            margin-top: 15px;
+            font-size: 0.85rem;
+            color: #7f8c8d;
+        }
+
+        .notification-actions {
+            margin-top: 15px;
+            display: flex;
+            justify-content: flex-end;
+        }
+
+            .notification-actions .btn {
+                padding: 6px 12px;
+                border-radius: 8px;
+                font-size: 14px;
+                transition: all 0.3s ease;
+            }
+
+        .notification-badge {
+            display: inline-block;
+            background-color: var(--primary-color);
+            color: white;
+            border-radius: 50%;
+            width: 22px;
+            height: 22px;
+            text-align: center;
+            line-height: 22px;
+            font-size: 12px;
+            margin-left: 8px;
+        }
+
+        /* Modal Styling */
+        .modal-content {
+            border-radius: 15px;
+            border: none;
+            box-shadow: 0 10px 30px rgba(0, 0, 0, 0.15);
+        }
+
+        .modal-header {
+            background-color: var(--primary-color);
+            color: white;
+            border-radius: 15px 15px 0 0;
+            padding: 15px 20px;
+        }
+
+        .modal-body {
+            padding: 25px;
+        }
+
+        .order-details-table {
+            width: 100%;
+            margin-top: 15px;
+        }
+
+            .order-details-table th {
+                background-color: #f8f9fa;
+                font-weight: 500;
+                padding: 12px;
+                color: #5d6578;
+            }
+
+            .order-details-table td {
+                padding: 12px;
+                border-top: 1px solid #eee;
+            }
+
+        .modal-footer .btn {
+            padding: 8px 20px;
+            border-radius: 8px;
+            transition: all 0.3s ease;
+        }
+
+        .spinner-border {
+            width: 1rem;
+            height: 1rem;
+            margin-right: 10px;
+        }
+
+        /* Responsive Adjustments */
+        @media (max-width: 992px) {
+            .sidebar {
+                width: 220px;
+            }
+
+            .main-content {
+                margin-left: 220px;
+            }
+
+            .toggle-button {
+                left: 235px;
+            }
+        }
+
+        @media (max-width: 768px) {
+            .sidebar {
+                width: 240px;
+            }
+
+            .main-content {
+                margin-left: 0;
+                padding: 15px;
+            }
+
+            .sidebar:not(.hidden) + .main-content {
+                opacity: 0.3;
+                pointer-events: none;
+            }
+
+            .toggle-button {
+                left: 255px;
+            }
+
+            .filters {
+                flex-direction: column;
+            }
+        }
     </style>
 </head>
 <body>
-    <div class="d-flex">
-        <div id="sidebar" class="p-3 sidebar">
-            <nav class="nav flex-column text-center">
-                <a href="dashboard.html" class="nav-link">Dashboard</a>
-                <a href="products.html" class="nav-link">Products</a>
-                <a href="transactions.html" class="nav-link">Transactions</a>
-                <a href="notifications.html" class="nav-link active">Notifications</a>
-                <a href="account.html" class="nav-link">Account</a>
-            </nav>
+    <div class="page-container">
+        <!-- Sidebar -->
+        <div id="sidebar" class="sidebar">
+            <div class="logo-container">
+                <h3>Meogeo Sarang</h3>
+                <small style="color: var(--light-text)">Korean Mart</small>
+            </div>
 
-            <!-- Sign out button at the bottom -->
-            <button class="sign-out-btn">Sign out</button>
+            <div class="nav-menu">
+                <div class="nav-item">
+                    <a href="dashboard.html" class="nav-link">
+                        <i class="fas fa-home"></i>
+                        <span>Dashboard</span>
+                    </a>
+                </div>
+                <div class="nav-item">
+                    <a href="myorders.html" class="nav-link">
+                        <i class="fas fa-shopping-bag"></i>
+                        <span>My Orders</span>
+                    </a>
+                </div>
+                <div class="nav-item">
+                    <a href="favorites.html" class="nav-link">
+                        <i class="fas fa-heart"></i>
+                        <span>Favorites</span>
+                    </a>
+                </div>
+                <div class="nav-item">
+                    <a href="products.html" class="nav-link">
+                        <i class="fas fa-store"></i>
+                        <span>Products</span>
+                    </a>
+                </div>
+                <div class="nav-item">
+                    <a href="notifications.html" class="nav-link active">
+                        <i class="fas fa-bell"></i>
+                        <span>Notifications</span>
+                        <span class="notification-badge">3</span>
+                    </a>
+                </div>
+                <div class="nav-item">
+                    <a href="Account.html" class="nav-link">
+                        <i class="fas fa-user"></i>
+                        <span>My Profile</span>
+                    </a>
+                </div>
+            </div>
+
+            <button class="sign-out-btn">
+                <i class="fas fa-sign-out-alt"></i>
+                <span>Sign Out</span>
+            </button>
         </div>
 
-        <div class="flex-grow-1 main-content">
-            <span id="toggle-sidebar" class="toggle-button">&#9776;</span>
-            <h1 class="display-6 fw-bold text-center mb-4">Notifications</h1>
-            <div id="notifications-list" class="container">
-                <div class="notification-card">
-                    <h5>New Order</h5>
-                    <p>Order #12345 has been placed.</p>
-                    <small class="text-muted">Just now</small>
+        <!-- Main Content Area -->
+        <div class="main-content">
+            <button id="toggle-sidebar" class="toggle-button">
+                <i class="fas fa-bars"></i>
+            </button>
+
+            <div class="dashboard-header">
+                <div class="welcome-message">
+                    <h1>Notifications</h1>
+                    <p>Keep track of your orders, payments, and important updates</p>
                 </div>
-                <div class="notification-card">
-                    <h5>Payment Received</h5>
-                    <p>Payment for Order #12344 has been confirmed.</p>
-                    <small class="text-muted">5 mins ago</small>
+                <div class="filters">
+                    <div class="filter-buttons">
+                        <button class="filter-btn active" data-filter="all">All</button>
+                        <button class="filter-btn" data-filter="orders">Orders</button>
+                        <button class="filter-btn" data-filter="payments">Payments</button>
+                        <button class="filter-btn" data-filter="alerts">Alerts</button>
+                    </div>
+                    <button class="refresh-btn">
+                        <i class="fas fa-sync-alt"></i> Refresh
+                    </button>
                 </div>
-                <div class="notification-card">
-                    <h5>Stock Alert</h5>
-                    <p>Samyang Ramen is running low on stock.</p>
-                    <small class="text-muted">30 mins ago</small>
+            </div>
+
+            <div id="notifications-list">
+                <!-- New Order notification with a modal trigger -->
+                <div class="notification-card unread" data-type="orders" data-bs-toggle="modal" data-bs-target="#orderModal">
+                    <div class="notification-header">
+                        <div class="notification-icon">
+                            <i class="fas fa-shopping-bag"></i>
+                        </div>
+                        <h5 class="notification-title">New Order #12345</h5>
+                    </div>
+                    <p class="mb-0">A new order has been placed and is awaiting your confirmation.</p>
+                    <div class="notification-meta">
+                        <span><i class="far fa-clock me-1"></i> Just now</span>
+                        <span><i class="fas fa-tag me-1"></i> Orders</span>
+                    </div>
+                </div>
+
+                <!-- Payment Received Notification -->
+                <div class="notification-card payment" data-type="payments">
+                    <div class="notification-header">
+                        <div class="notification-icon">
+                            <i class="fas fa-credit-card"></i>
+                        </div>
+                        <h5 class="notification-title">Payment Received</h5>
+                    </div>
+                    <p class="mb-0">Payment for Order #12344 has been confirmed and processed successfully.</p>
+                    <div class="notification-meta">
+                        <span><i class="far fa-clock me-1"></i> 5 mins ago</span>
+                        <span><i class="fas fa-tag me-1"></i> Payments</span>
+                    </div>
+                </div>
+
+                <!-- Stock Alert Notification -->
+                <div class="notification-card alert" data-type="alerts">
+                    <div class="notification-header">
+                        <div class="notification-icon">
+                            <i class="fas fa-exclamation-triangle"></i>
+                        </div>
+                        <h5 class="notification-title">Stock Alert</h5>
+                    </div>
+                    <p class="mb-0">Samyang Ramen is running low on stock. Current quantity: 5 units remaining.</p>
+                    <div class="notification-meta">
+                        <span><i class="far fa-clock me-1"></i> 30 mins ago</span>
+                        <span><i class="fas fa-tag me-1"></i> Inventory</span>
+                    </div>
+                    <div class="notification-actions">
+                        <button class="btn btn-sm btn-outline-primary">Restock Now</button>
+                    </div>
                 </div>
             </div>
         </div>
     </div>
+
+    <!-- Modal for reviewing new order -->
+    <div class="modal fade" id="orderModal" tabindex="-1" aria-labelledby="orderModalLabel" aria-hidden="true">
+        <div class="modal-dialog modal-lg">
+            <div class="modal-content">
+                <div class="modal-header">
+                    <h5 class="modal-title" id="orderModalLabel">Order #12345 Details</h5>
+                    <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+                </div>
+                <div class="modal-body">
+                    <div class="row">
+                        <div class="col-md-6">
+                            <p><strong>Order ID:</strong> #12345</p>
+                            <p><strong>Date:</strong> <span id="order-date">April 9, 2025 - 10:30 AM</span></p>
+                            <p><strong>Payment Method:</strong> <span id="payment-method">Cash</span></p>
+                            <p><strong>Status:</strong> <span class="badge bg-warning">Pending</span></p>
+                        </div>
+                        <div class="col-md-6">
+                            <p><strong>Customer:</strong> Jisoo Kim</p>
+                            <p><strong>Phone:</strong> +1 234-567-8900</p>
+                            <p><strong>Email:</strong> jisoo.kim@example.com</p>
+                            <p><strong>Shipping Address:</strong> 1234 Elm Street, City, State</p>
+                        </div>
+                    </div>
+
+                    <h6 class="mt-4 mb-3"><strong>Order Items</strong></h6>
+                    <table class="table order-details-table">
+                        <thead>
+                            <tr>
+                                <th>Product</th>
+                                <th>Unit Price</th>
+                                <th>Quantity</th>
+                                <th class="text-end">Subtotal</th>
+                            </tr>
+                        </thead>
+                        <tbody id="order-items">
+                            <tr>
+                                <td>Samyang Ramen</td>
+                                <td>₱10.99</td>
+                                <td>2</td>
+                                <td class="text-end">₱21.98</td>
+                            </tr>
+                        </tbody>
+                        <tfoot>
+                            <tr>
+                                <td colspan="3" class="text-end"><strong>Subtotal:</strong></td>
+                                <td class="text-end">₱21.98</td>
+                            </tr>
+                            <tr>
+                                <td colspan="3" class="text-end"><strong>Tax (5%):</strong></td>
+                                <td class="text-end">₱1.10</td>
+                            </tr>
+                            <tr>
+                                <td colspan="3" class="text-end"><strong>Total:</strong></td>
+                                <td class="text-end"><strong>₱23.08</strong></td>
+                            </tr>
+                        </tfoot>
+                    </table>
+                </div>
+                <div class="modal-footer">
+                    <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Close</button>
+                    <button type="button" class="btn btn-danger me-2">Reject Order</button>
+                    <button type="button" class="btn btn-primary" id="confirm-order-btn">
+                        <span class="spinner-border spinner-border-sm d-none" role="status" aria-hidden="true"></span>
+                        Confirm Order
+                    </button>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0-alpha1/dist/js/bootstrap.bundle.min.js"></script>
     <script>
-        document.getElementById('toggle-sidebar').addEventListener('click', function () {
-            document.getElementById('sidebar').classList.toggle('hidden');
+        document.addEventListener('DOMContentLoaded', function () {
+            // Toggle sidebar
+            const toggleBtn = document.getElementById('toggle-sidebar');
+            const sidebar = document.getElementById('sidebar');
+
+            toggleBtn.addEventListener('click', function () {
+                sidebar.classList.toggle('hidden');
+                this.classList.toggle('shifted');
+            });
+
+            // Responsive behavior for mobile
+            function checkWindowSize() {
+                if (window.innerWidth <= 768) {
+                    sidebar.classList.add('hidden');
+                    toggleBtn.classList.add('shifted');
+                } else {
+                    sidebar.classList.remove('hidden');
+                    toggleBtn.classList.remove('shifted');
+                }
+            }
+
+            // Run on page load and resize
+            window.addEventListener('load', checkWindowSize);
+            window.addEventListener('resize', checkWindowSize);
+
+            // Notification filters
+            const filterButtons = document.querySelectorAll('.filter-btn');
+            const notificationCards = document.querySelectorAll('.notification-card');
+
+            filterButtons.forEach(button => {
+                button.addEventListener('click', function () {
+                    // Remove active class from all buttons
+                    filterButtons.forEach(btn => btn.classList.remove('active'));
+
+                    // Add active class to clicked button
+                    this.classList.add('active');
+
+                    const filterValue = this.getAttribute('data-filter');
+
+                    // Show/hide notifications based on filter
+                    notificationCards.forEach(card => {
+                        if (filterValue === 'all' || card.getAttribute('data-type') === filterValue) {
+                            card.style.display = 'block';
+                        } else {
+                            card.style.display = 'none';
+                        }
+                    });
+                });
+            });
+
+            // Refresh button animation
+            document.querySelector('.refresh-btn').addEventListener('click', function () {
+                const icon = this.querySelector('i');
+                icon.classList.add('fa-spin');
+
+                setTimeout(() => {
+                    icon.classList.remove('fa-spin');
+                }, 1000);
+            });
+
+            // Confirm order button loading state
+            document.getElementById('confirm-order-btn').addEventListener('click', function () {
+                const spinner = this.querySelector('.spinner-border');
+                const originalText = this.innerHTML;
+
+                // Show spinner
+                spinner.classList.remove('d-none');
+                this.innerHTML = '<span class="spinner-border spinner-border-sm" role="status" aria-hidden="true"></span> Processing...';
+                this.disabled = true;
+
+                // Simulate processing
+                setTimeout(() => {
+                    // Hide spinner
+                    this.innerHTML = '<i class="fas fa-check"></i> Order Confirmed';
+                    this.classList.remove('btn-primary');
+                    this.classList.add('btn-success');
+
+                    // Close modal after a delay
+                    setTimeout(() => {
+                        const modal = bootstrap.Modal.getInstance(document.getElementById('orderModal'));
+                        modal.hide();
+
+                        // Reset button after modal is closed
+                        setTimeout(() => {
+                            this.innerHTML = originalText;
+                            this.classList.remove('btn-success');
+                            this.classList.add('btn-primary');
+                            this.disabled = false;
+                            spinner.classList.add('d-none');
+                        }, 500);
+                    }, 1500);
+                }, 2000);
+            });
+
+            // Fetch cart and payment method from localStorage (if available)
+            let cart = [];
+            let paymentMethod = 'Cash';
+
+            try {
+                cart = JSON.parse(localStorage.getItem('cart')) || [];
+                paymentMethod = localStorage.getItem('paymentMethod') || 'Cash';
+            } catch (e) {
+                console.error('Error parsing localStorage data:', e);
+            }
+
+            // Update payment method in the modal
+            document.getElementById('payment-method').textContent = paymentMethod;
+
+            // If we have cart items, populate the order items
+            if (cart.length > 0) {
+                let orderItemsHtml = '';
+                let subtotal = 0;
+
+                cart.forEach(item => {
+                    const itemTotal = item.price * item.quantity;
+                    subtotal += itemTotal;
+
+                    orderItemsHtml += `
+                            <tr>
+                                <td>${item.name}</td>
+                                <td>₱${item.price.toFixed(2)}</td>
+                                <td>${item.quantity}</td>
+                                <td class="text-end">₱${itemTotal.toFixed(2)}</td>
+                            </tr>`;
+                });
+
+                document.getElementById('order-items').innerHTML = orderItemsHtml;
+
+                // Calculate and update totals
+                const tax = subtotal * 0.05;
+                const total = subtotal + tax;
+
+                const tfoot = document.querySelector('.order-details-table tfoot');
+                tfoot.innerHTML = `
+                        <tr>
+                            <td colspan="3" class="text-end"><strong>Subtotal:</strong></td>
+                            <td class="text-end">₱${subtotal.toFixed(2)}</td>
+                        </tr>
+                        <tr>
+                            <td colspan="3" class="text-end"><strong>Tax (5%):</strong></td>
+                            <td class="text-end">₱${tax.toFixed(2)}</td>
+                        </tr>
+                        <tr>
+                            <td colspan="3" class="text-end"><strong>Total:</strong></td>
+                            <td class="text-end"><strong>₱${total.toFixed(2)}</strong></td>
+                        </tr>`;
+            }
+
+            // Set today's date for the order
+            const today = new Date();
+            const options = {
+                year: 'numeric',
+                month: 'long',
+                day: 'numeric',
+                hour: '2-digit',
+                minute: '2-digit'
+            };
+            document.getElementById('order-date').textContent = today.toLocaleDateString('en-US', options);
         });
     </script>
 </body>

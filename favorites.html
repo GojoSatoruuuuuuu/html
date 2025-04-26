@@ -1,0 +1,808 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Favorites | Meogeo Sarang Korean Mart</title>
+    <link rel="icon" type="image/png" href="/assets/icons/MSKM_Tab_Logo-32x32.png">
+    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0-alpha1/dist/css/bootstrap.min.css">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+    <style>
+        :root {
+            --primary-color: #3498db; /* Blue */
+            --secondary-color: #f8c471;
+            --accent-color: #3498db;
+            --light-bg: #f9f9f9;
+            --dark-text: #2c3e50;
+            --light-text: #ecf0f1;
+            --card-shadow: 0 8px 16px rgba(0, 0, 0, 0.1);
+        }
+
+        body {
+            background-color: var(--light-bg);
+            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+            color: var(--dark-text);
+        }
+
+        .page-container {
+            display: flex;
+            min-height: 100vh;
+        }
+
+        /* Sidebar Styling */
+        .sidebar {
+            background: linear-gradient(135deg, var(--primary-color), #2980b9);
+            width: 250px;
+            position: fixed;
+            height: 100vh;
+            left: 0;
+            top: 0;
+            transition: all 0.3s ease;
+            box-shadow: 2px 0 10px rgba(0, 0, 0, 0.1);
+            z-index: 100;
+        }
+
+            .sidebar.hidden {
+                transform: translateX(-100%);
+            }
+
+        .logo-container {
+            padding: 20px 15px;
+            text-align: center;
+            border-bottom: 1px solid rgba(255, 255, 255, 0.1);
+        }
+
+            .logo-container h3 {
+                color: var(--light-text);
+                font-weight: 700;
+                margin-bottom: 0;
+                font-size: 1.3rem;
+            }
+
+        .nav-menu {
+            padding: 20px 0;
+        }
+
+        .nav-item {
+            padding: 0 15px;
+            margin-bottom: 5px;
+        }
+
+        .nav-link {
+            display: flex;
+            align-items: center;
+            color: var(--light-text);
+            padding: 12px 15px;
+            border-radius: 8px;
+            transition: all 0.3s ease;
+            text-decoration: none;
+        }
+
+            .nav-link i {
+                margin-right: 10px;
+                font-size: 18px;
+            }
+
+            .nav-link:hover, .nav-link.active {
+                background-color: rgba(255, 255, 255, 0.15);
+                color: var(--light-text);
+            }
+
+        .sign-out-btn {
+            position: absolute;
+            bottom: 20px;
+            left: 20px;
+            right: 20px;
+            background-color: rgba(255, 255, 255, 0.2);
+            color: var(--light-text);
+            border: none;
+            padding: 10px;
+            border-radius: 8px;
+            cursor: pointer;
+            transition: all 0.3s ease;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+        }
+
+            .sign-out-btn i {
+                margin-right: 8px;
+            }
+
+            .sign-out-btn:hover {
+                background-color: rgba(255, 255, 255, 0.3);
+            }
+
+        /* Main Content Styling */
+        .main-content {
+            flex: 1;
+            padding: 25px;
+            margin-left: 250px;
+            transition: margin-left 0.3s ease;
+        }
+
+        .sidebar.hidden + .main-content {
+            margin-left: 0;
+        }
+
+        .toggle-button {
+            position: fixed;
+            top: 25px;
+            left: 265px;
+            background-color: var(--primary-color);
+            color: white;
+            border: none;
+            width: 40px;
+            height: 40px;
+            border-radius: 50%;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            cursor: pointer;
+            z-index: 101;
+            box-shadow: 0 2px 5px rgba(0, 0, 0, 0.2);
+            transition: all 0.3s ease;
+        }
+
+            .toggle-button.shifted {
+                left: 15px;
+            }
+
+        /* Header Section */
+        .favorites-header {
+            margin-bottom: 30px;
+            padding-top: 20px; /* Added space for toggle button */
+        }
+
+        .welcome-message h1 {
+            font-size: 1.8rem;
+            font-weight: 700;
+            margin-bottom: 10px;
+        }
+
+        .welcome-message p {
+            color: #7f8c8d;
+            font-size: 1rem;
+        }
+
+        /* Search and Filter Bar */
+        .search-filter-bar {
+            background-color: white;
+            border-radius: 15px;
+            padding: 15px 20px;
+            margin-bottom: 25px;
+            box-shadow: var(--card-shadow);
+            display: flex;
+            flex-wrap: wrap;
+            gap: 15px;
+            align-items: center;
+        }
+
+        .search-input {
+            flex: 1;
+            min-width: 200px;
+            border: 1px solid #e0e0e0;
+            border-radius: 8px;
+            padding: 8px 15px;
+            font-size: 0.9rem;
+        }
+
+        .filter-dropdown {
+            border: 1px solid #e0e0e0;
+            border-radius: 8px;
+            padding: 8px 15px;
+            font-size: 0.9rem;
+            min-width: 150px;
+        }
+
+        /* Favorites Grid */
+        .favorites-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fill, minmax(280px, 1fr));
+            gap: 25px;
+        }
+
+        .favorite-card {
+            background-color: white;
+            border-radius: 15px;
+            overflow: hidden;
+            box-shadow: var(--card-shadow);
+            transition: transform 0.3s ease, box-shadow 0.3s ease;
+            position: relative;
+        }
+
+            .favorite-card:hover {
+                transform: translateY(-5px);
+                box-shadow: 0 12px 20px rgba(0, 0, 0, 0.15);
+            }
+
+        .favorite-img {
+            height: 180px;
+            width: 100%;
+            background-color: #eee;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            color: #aaa;
+            overflow: hidden;
+        }
+
+        .favorite-actions {
+            position: absolute;
+            top: 10px;
+            right: 10px;
+            display: flex;
+            gap: 5px;
+        }
+
+        .action-btn {
+            width: 35px;
+            height: 35px;
+            border-radius: 50%;
+            background-color: white;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            cursor: pointer;
+            border: none;
+            box-shadow: 0 2px 5px rgba(0, 0, 0, 0.1);
+            transition: all 0.2s ease;
+        }
+
+            .action-btn:hover {
+                background-color: #f8f9fa;
+            }
+
+            .action-btn.remove {
+                color: #e74c3c;
+            }
+
+            .action-btn.cart {
+                color: var(--primary-color);
+            }
+
+        .favorite-info {
+            padding: 15px;
+        }
+
+            .favorite-info h4 {
+                font-size: 1.1rem;
+                margin-bottom: 5px;
+                font-weight: 600;
+            }
+
+            .favorite-info .description {
+                color: #7f8c8d;
+                font-size: 0.9rem;
+                margin-bottom: 10px;
+                height: 40px;
+                overflow: hidden;
+                text-overflow: ellipsis;
+                display: -webkit-box;
+                -webkit-line-clamp: 2;
+                -webkit-box-orient: vertical;
+            }
+
+        .price-cart {
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
+            margin-top: 10px;
+        }
+
+        .price {
+            font-weight: bold;
+            color: var(--primary-color);
+            font-size: 1.1rem;
+        }
+
+        .add-cart-btn {
+            background-color: var(--primary-color);
+            color: white;
+            border: none;
+            border-radius: 5px;
+            padding: 8px 12px;
+            font-size: 0.9rem;
+            cursor: pointer;
+            transition: all 0.3s ease;
+            display: flex;
+            align-items: center;
+        }
+
+            .add-cart-btn i {
+                margin-right: 5px;
+            }
+
+            .add-cart-btn:hover {
+                background-color: #2980b9;
+            }
+
+        .category-tag {
+            display: inline-block;
+            background-color: #e9f7fe;
+            color: var(--primary-color);
+            font-size: 0.8rem;
+            padding: 3px 8px;
+            border-radius: 5px;
+            margin-bottom: 10px;
+        }
+
+        /* Empty Favorites State */
+        .empty-favorites {
+            text-align: center;
+            padding: 50px 20px;
+            background-color: white;
+            border-radius: 15px;
+            box-shadow: var(--card-shadow);
+        }
+
+            .empty-favorites i {
+                font-size: 3rem;
+                color: #ddd;
+                margin-bottom: 20px;
+            }
+
+            .empty-favorites h3 {
+                font-size: 1.5rem;
+                margin-bottom: 10px;
+                color: var(--dark-text);
+            }
+
+            .empty-favorites p {
+                color: #7f8c8d;
+                margin-bottom: 20px;
+            }
+
+        .browse-btn {
+            background-color: var(--primary-color);
+            color: white;
+            border: none;
+            border-radius: 8px;
+            padding: 10px 20px;
+            font-size: 1rem;
+            cursor: pointer;
+            transition: all 0.3s ease;
+            display: inline-flex;
+            align-items: center;
+        }
+
+            .browse-btn i {
+                margin-right: 8px;
+            }
+
+            .browse-btn:hover {
+                background-color: #2980b9;
+            }
+
+        .notification-badge {
+            position: absolute;
+            top: -5px;
+            right: -5px;
+            background-color: #e74c3c;
+            color: white;
+            font-size: 0.7rem;
+            font-weight: bold;
+            width: 20px;
+            height: 20px;
+            border-radius: 50%;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+        }
+
+        /* Pagination */
+        .pagination-container {
+            display: flex;
+            justify-content: center;
+            margin-top: 30px;
+        }
+
+        .pagination {
+            display: flex;
+            list-style: none;
+            padding: 0;
+            margin: 0;
+        }
+
+        .page-item {
+            margin: 0 5px;
+        }
+
+        .page-link {
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            width: 40px;
+            height: 40px;
+            border-radius: 8px;
+            background-color: white;
+            color: var(--dark-text);
+            text-decoration: none;
+            transition: all 0.3s ease;
+            box-shadow: 0 2px 5px rgba(0, 0, 0, 0.1);
+        }
+
+            .page-link:hover {
+                background-color: #f8f9fa;
+            }
+
+            .page-link.active {
+                background-color: var(--primary-color);
+                color: white;
+            }
+
+        /* Responsive Adjustments */
+        @media (max-width: 992px) {
+            .sidebar {
+                width: 220px;
+            }
+
+            .main-content {
+                margin-left: 220px;
+            }
+
+            .toggle-button {
+                left: 235px;
+            }
+        }
+
+        @media (max-width: 768px) {
+            .sidebar {
+                width: 240px;
+            }
+
+            .main-content {
+                margin-left: 0;
+                padding: 15px;
+            }
+
+            .sidebar:not(.hidden) + .main-content {
+                opacity: 0.3;
+                pointer-events: none;
+            }
+
+            .toggle-button {
+                left: 255px;
+            }
+
+            .favorites-grid {
+                grid-template-columns: repeat(auto-fill, minmax(250px, 1fr));
+            }
+        }
+
+        @media (max-width: 576px) {
+            .favorites-grid {
+                grid-template-columns: 1fr;
+            }
+
+            .search-filter-bar {
+                flex-direction: column;
+                align-items: stretch;
+            }
+
+            .search-input, .filter-dropdown {
+                width: 100%;
+            }
+        }
+    </style>
+</head>
+<body>
+    <div class="page-container">
+        <!-- Sidebar -->
+        <div id="sidebar" class="sidebar">
+            <div class="logo-container">
+                <h3>Meogeo Sarang</h3>
+                <small style="color: var(--light-text)">Korean Mart</small>
+            </div>
+
+            <div class="nav-menu">
+                <div class="nav-item">
+                    <a href="dashboard.html" class="nav-link">
+                        <i class="fas fa-home"></i>
+                        <span>Dashboard</span>
+                    </a>
+                </div>
+                <div class="nav-item">
+                    <a href="myorders.html" class="nav-link">
+                        <i class="fas fa-shopping-bag"></i>
+                        <span>My Orders</span>
+                    </a>
+                </div>
+                <div class="nav-item">
+                    <a href="favorites.html" class="nav-link active">
+                        <i class="fas fa-heart"></i>
+                        <span>Favorites</span>
+                    </a>
+                </div>
+                <div class="nav-item">
+                    <a href="products.html" class="nav-link">
+                        <i class="fas fa-store"></i>
+                        <span>Products</span>
+                    </a>
+                </div>
+                <div class="nav-item">
+                    <a href="notifications.html" class="nav-link">
+                        <i class="fas fa-bell"></i>
+                        <span>Notifications</span>
+                        <div class="notification-badge">3</div>
+                    </a>
+                </div>
+                <div class="nav-item">
+                    <a href="Account.html" class="nav-link">
+                        <i class="fas fa-user"></i>
+                        <span>My Profile</span>
+                    </a>
+                </div>
+            </div>
+
+            <button class="sign-out-btn">
+                <i class="fas fa-sign-out-alt"></i>
+                <span>Sign Out</span>
+            </button>
+        </div>
+
+        <!-- Main Content Area -->
+        <div class="main-content">
+            <button id="toggle-sidebar" class="toggle-button">
+                <i class="fas fa-bars"></i>
+            </button>
+
+            <div class="favorites-header">
+                <div class="welcome-message">
+                    <h1>Your Favorites</h1>
+                    <p>Items you've saved for later - easily add them to your cart anytime.</p>
+                </div>
+            </div>
+
+            <!-- Search and Filter Bar -->
+            <div class="search-filter-bar">
+                <input type="text" class="search-input" placeholder="Search in favorites...">
+                <select class="filter-dropdown">
+                    <option value="all">All Categories</option>
+                    <option value="snacks">Snacks</option>
+                    <option value="beverages">Beverages</option>
+                    <option value="frozen">Frozen Foods</option>
+                    <option value="pantry">Pantry</option>
+                    <option value="fresh">Fresh Foods</option>
+                </select>
+                <select class="filter-dropdown">
+                    <option value="newest">Newest First</option>
+                    <option value="oldest">Oldest First</option>
+                    <option value="price-low">Price: Low to High</option>
+                    <option value="price-high">Price: High to Low</option>
+                </select>
+            </div>
+
+            <!-- Favorites Grid -->
+            <div class="favorites-grid">
+                <!-- Favorite Item 1 -->
+                <div class="favorite-card">
+                    <div class="favorite-img">
+                        <i class="fa fa-image fa-2x"></i>
+                    </div>
+                    <div class="favorite-actions">
+                        <button class="action-btn remove">
+                            <i class="fas fa-trash-alt"></i>
+                        </button>
+                    </div>
+                    <div class="favorite-info">
+                        <span class="category-tag">Snacks</span>
+                        <h4>Choco Pie Original</h4>
+                        <p class="description">Classic Korean chocolate-covered cake with marshmallow filling.</p>
+                        <div class="price-cart">
+                            <span class="price">$5.99</span>
+                            <button class="add-cart-btn">
+                                <i class="fas fa-shopping-cart"></i>
+                                Add to Cart
+                            </button>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- Favorite Item 2 -->
+                <div class="favorite-card">
+                    <div class="favorite-img">
+                        <i class="fa fa-image fa-2x"></i>
+                    </div>
+                    <div class="favorite-actions">
+                        <button class="action-btn remove">
+                            <i class="fas fa-trash-alt"></i>
+                        </button>
+                    </div>
+                    <div class="favorite-info">
+                        <span class="category-tag">Fresh Foods</span>
+                        <h4>Kimchi (16oz)</h4>
+                        <p class="description">Traditional fermented napa cabbage with Korean spices.</p>
+                        <div class="price-cart">
+                            <span class="price">$8.50</span>
+                            <button class="add-cart-btn">
+                                <i class="fas fa-shopping-cart"></i>
+                                Add to Cart
+                            </button>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- Favorite Item 3 -->
+                <div class="favorite-card">
+                    <div class="favorite-img">
+                        <i class="fa fa-image fa-2x"></i>
+                    </div>
+                    <div class="favorite-actions">
+                        <button class="action-btn remove">
+                            <i class="fas fa-trash-alt"></i>
+                        </button>
+                    </div>
+                    <div class="favorite-info">
+                        <span class="category-tag">Beverages</span>
+                        <h4>Soju - Original</h4>
+                        <p class="description">Classic Korean distilled alcoholic beverage, clear and clean taste.</p>
+                        <div class="price-cart">
+                            <span class="price">$6.99</span>
+                            <button class="add-cart-btn">
+                                <i class="fas fa-shopping-cart"></i>
+                                Add to Cart
+                            </button>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- Favorite Item 4 -->
+                <div class="favorite-card">
+                    <div class="favorite-img">
+                        <i class="fa fa-image fa-2x"></i>
+                    </div>
+                    <div class="favorite-actions">
+                        <button class="action-btn remove">
+                            <i class="fas fa-trash-alt"></i>
+                        </button>
+                    </div>
+                    <div class="favorite-info">
+                        <span class="category-tag">Frozen Foods</span>
+                        <h4>Bibigo Mandu - Pork</h4>
+                        <p class="description">Traditional Korean dumplings filled with savory pork and vegetables.</p>
+                        <div class="price-cart">
+                            <span class="price">$15.25</span>
+                            <button class="add-cart-btn">
+                                <i class="fas fa-shopping-cart"></i>
+                                Add to Cart
+                            </button>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- Favorite Item 5 -->
+                <div class="favorite-card">
+                    <div class="favorite-img">
+                        <i class="fa fa-image fa-2x"></i>
+                    </div>
+                    <div class="favorite-actions">
+                        <button class="action-btn remove">
+                            <i class="fas fa-trash-alt"></i>
+                        </button>
+                    </div>
+                    <div class="favorite-info">
+                        <span class="category-tag">Noodles</span>
+                        <h4>Shin Ramyun - 5 Pack</h4>
+                        <p class="description">Spicy Korean instant noodles, a popular classic.</p>
+                        <div class="price-cart">
+                            <span class="price">$8.99</span>
+                            <button class="add-cart-btn">
+                                <i class="fas fa-shopping-cart"></i>
+                                Add to Cart
+                            </button>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- Favorite Item 6 -->
+                <div class="favorite-card">
+                    <div class="favorite-img">
+                        <i class="fa fa-image fa-2x"></i>
+                    </div>
+                    <div class="favorite-actions">
+                        <button class="action-btn remove">
+                            <i class="fas fa-trash-alt"></i>
+                        </button>
+                    </div>
+                    <div class="favorite-info">
+                        <span class="category-tag">Snacks</span>
+                        <h4>Honey Butter Chip</h4>
+                        <p class="description">Sweet and savory potato chips with honey butter flavor.</p>
+                        <div class="price-cart">
+                            <span class="price">$4.50</span>
+                            <button class="add-cart-btn">
+                                <i class="fas fa-shopping-cart"></i>
+                                Add to Cart
+                            </button>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Pagination -->
+            <div class="pagination-container">
+                <ul class="pagination">
+                    <li class="page-item">
+                        <a class="page-link" href="#" aria-label="Previous">
+                            <i class="fas fa-chevron-left"></i>
+                        </a>
+                    </li>
+                    <li class="page-item"><a class="page-link active" href="#">1</a></li>
+                    <li class="page-item"><a class="page-link" href="#">2</a></li>
+                    <li class="page-item"><a class="page-link" href="#">3</a></li>
+                    <li class="page-item">
+                        <a class="page-link" href="#" aria-label="Next">
+                            <i class="fas fa-chevron-right"></i>
+                        </a>
+                    </li>
+                </ul>
+            </div>
+
+            <!-- Empty Favorites State (hidden by default) -->
+            <div class="empty-favorites" style="display: none;">
+                <i class="far fa-heart"></i>
+                <h3>Your Favorites List is Empty</h3>
+                <p>Browse our products and add items to your favorites to see them here.</p>
+                <button class="browse-btn">
+                    <i class="fas fa-store"></i>
+                    Browse Products
+                </button>
+            </div>
+        </div>
+    </div>
+
+    <script>
+        // Toggle sidebar functionality
+        const toggleBtn = document.getElementById('toggle-sidebar');
+        const sidebar = document.getElementById('sidebar');
+
+        toggleBtn.addEventListener('click', function () {
+            sidebar.classList.toggle('hidden');
+            this.classList.toggle('shifted');
+        });
+
+        // Responsive behavior for mobile
+        function checkWindowSize() {
+            if (window.innerWidth <= 768) {
+                sidebar.classList.add('hidden');
+                toggleBtn.classList.add('shifted');
+            } else {
+                sidebar.classList.remove('hidden');
+                toggleBtn.classList.remove('shifted');
+            }
+        }
+
+        // Run on page load and resize
+        window.addEventListener('load', checkWindowSize);
+        window.addEventListener('resize', checkWindowSize);
+
+        // Remove item from favorites
+        document.querySelectorAll('.action-btn.remove').forEach(button => {
+            button.addEventListener('click', function() {
+                const card = this.closest('.favorite-card');
+                card.style.opacity = '0';
+                setTimeout(() => {
+                    card.remove();
+                    // Check if there are any favorites left
+                    const remainingFavorites = document.querySelectorAll('.favorite-card').length;
+                    if (remainingFavorites === 0) {
+                        document.querySelector('.favorites-grid').style.display = 'none';
+                        document.querySelector('.pagination-container').style.display = 'none';
+                        document.querySelector('.empty-favorites').style.display = 'block';
+                    }
+                }, 300);
+                card.style.transition = 'opacity 0.3s ease';
+            });
+        });
+
+        // Add to cart functionality
+        document.querySelectorAll('.add-cart-btn').forEach(button => {
+            button.addEventListener('click', function() {
+                const productName = this.closest('.favorite-info').querySelector('h4').textContent;
+                alert(`Added ${productName} to your cart!`);
+            });
+        });
+    </script>
+</body>
+</html>
