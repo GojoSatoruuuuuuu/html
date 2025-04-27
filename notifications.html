@@ -367,6 +367,53 @@
             margin-right: 10px;
         }
 
+        .quantity-control {
+            display: flex;
+            align-items: center;
+        }
+
+            .quantity-control .btn {
+                width: 30px;
+                height: 30px;
+                border-radius: 50%;
+                padding: 0;
+                display: flex;
+                align-items: center;
+                justify-content: center;
+                font-size: 14px;
+            }
+
+            .quantity-control input {
+                width: 50px;
+                text-align: center;
+                border: 1px solid #ddd;
+                border-radius: 4px;
+                margin: 0 5px;
+            }
+
+        .status-pill {
+            display: inline-block;
+            padding: 5px 10px;
+            border-radius: 20px;
+            font-size: 12px;
+            font-weight: 600;
+        }
+
+        .status-processing {
+            background-color: #FFF3CD;
+            color: #856404;
+        }
+
+        .status-shipped {
+            background-color: #D1ECF1;
+            color: #0C5460;
+        }
+
+        .status-delivered {
+            background-color: #D4EDDA;
+            color: #155724;
+        }
+
         /* Responsive Adjustments */
         @media (max-width: 992px) {
             .sidebar {
@@ -471,14 +518,14 @@
             <div class="dashboard-header">
                 <div class="welcome-message">
                     <h1>Notifications</h1>
-                    <p>Keep track of your orders, payments, and important updates</p>
+                    <p>Keep track of your orders, promotions, and important updates</p>
                 </div>
                 <div class="filters">
                     <div class="filter-buttons">
                         <button class="filter-btn active" data-filter="all">All</button>
                         <button class="filter-btn" data-filter="orders">Orders</button>
                         <button class="filter-btn" data-filter="payments">Payments</button>
-                        <button class="filter-btn" data-filter="alerts">Alerts</button>
+                        <button class="filter-btn" data-filter="promotions">Promotions</button>
                     </div>
                     <button class="refresh-btn">
                         <i class="fas fa-sync-alt"></i> Refresh
@@ -487,58 +534,58 @@
             </div>
 
             <div id="notifications-list">
-                <!-- New Order notification with a modal trigger -->
+                <!-- Order Status Update notification with a modal trigger -->
                 <div class="notification-card unread" data-type="orders" data-bs-toggle="modal" data-bs-target="#orderModal">
                     <div class="notification-header">
                         <div class="notification-icon">
                             <i class="fas fa-shopping-bag"></i>
                         </div>
-                        <h5 class="notification-title">New Order #12345</h5>
+                        <h5 class="notification-title">Order #12345 Update</h5>
                     </div>
-                    <p class="mb-0">A new order has been placed and is awaiting your confirmation.</p>
+                    <p class="mb-0">Your order #12345 has been received and is being processed.</p>
                     <div class="notification-meta">
                         <span><i class="far fa-clock me-1"></i> Just now</span>
                         <span><i class="fas fa-tag me-1"></i> Orders</span>
                     </div>
                 </div>
 
-                <!-- Payment Received Notification -->
+                <!-- Payment Confirmation Notification -->
                 <div class="notification-card payment" data-type="payments">
                     <div class="notification-header">
                         <div class="notification-icon">
                             <i class="fas fa-credit-card"></i>
                         </div>
-                        <h5 class="notification-title">Payment Received</h5>
+                        <h5 class="notification-title">Payment Confirmed</h5>
                     </div>
-                    <p class="mb-0">Payment for Order #12344 has been confirmed and processed successfully.</p>
+                    <p class="mb-0">Your payment for Order #12345 has been confirmed. Thank you for your purchase!</p>
                     <div class="notification-meta">
                         <span><i class="far fa-clock me-1"></i> 5 mins ago</span>
                         <span><i class="fas fa-tag me-1"></i> Payments</span>
                     </div>
                 </div>
 
-                <!-- Stock Alert Notification -->
-                <div class="notification-card alert" data-type="alerts">
+                <!-- Promotion Notification -->
+                <div class="notification-card alert" data-type="promotions">
                     <div class="notification-header">
                         <div class="notification-icon">
-                            <i class="fas fa-exclamation-triangle"></i>
+                            <i class="fas fa-percentage"></i>
                         </div>
-                        <h5 class="notification-title">Stock Alert</h5>
+                        <h5 class="notification-title">Weekend Special Offer!</h5>
                     </div>
-                    <p class="mb-0">Samyang Ramen is running low on stock. Current quantity: 5 units remaining.</p>
+                    <p class="mb-0">Get 20% off on all Samyang Ramen products this weekend. Use code: SPICY20</p>
                     <div class="notification-meta">
                         <span><i class="far fa-clock me-1"></i> 30 mins ago</span>
-                        <span><i class="fas fa-tag me-1"></i> Inventory</span>
+                        <span><i class="fas fa-tag me-1"></i> Promotions</span>
                     </div>
                     <div class="notification-actions">
-                        <button class="btn btn-sm btn-outline-primary">Restock Now</button>
+                        <button class="btn btn-sm btn-outline-primary">Shop Now</button>
                     </div>
                 </div>
             </div>
         </div>
     </div>
 
-    <!-- Modal for reviewing new order -->
+    <!-- Modal for viewing and updating order -->
     <div class="modal fade" id="orderModal" tabindex="-1" aria-labelledby="orderModalLabel" aria-hidden="true">
         <div class="modal-dialog modal-lg">
             <div class="modal-content">
@@ -552,13 +599,16 @@
                             <p><strong>Order ID:</strong> #12345</p>
                             <p><strong>Date:</strong> <span id="order-date">April 9, 2025 - 10:30 AM</span></p>
                             <p><strong>Payment Method:</strong> <span id="payment-method">Cash</span></p>
-                            <p><strong>Status:</strong> <span class="badge bg-warning">Pending</span></p>
+                            <p><strong>Status:</strong> <span class="status-pill status-processing">Processing</span></p>
                         </div>
                         <div class="col-md-6">
-                            <p><strong>Customer:</strong> Jisoo Kim</p>
-                            <p><strong>Phone:</strong> +1 234-567-8900</p>
-                            <p><strong>Email:</strong> jisoo.kim@example.com</p>
-                            <p><strong>Shipping Address:</strong> 1234 Elm Street, City, State</p>
+                            <p><strong>Shipping Address:</strong></p>
+                            <p>
+                                Jisoo Kim<br>
+                                1234 Elm Street<br>
+                                City, State<br>
+                                +1 234-567-8900
+                            </p>
                         </div>
                     </div>
 
@@ -576,32 +626,43 @@
                             <tr>
                                 <td>Samyang Ramen</td>
                                 <td>₱10.99</td>
-                                <td>2</td>
-                                <td class="text-end">₱21.98</td>
+                                <td>
+                                    <div class="quantity-control">
+                                        <button class="btn btn-sm btn-outline-secondary quantity-decrease">-</button>
+                                        <input type="number" min="1" value="2" class="item-quantity">
+                                        <button class="btn btn-sm btn-outline-secondary quantity-increase">+</button>
+                                    </div>
+                                </td>
+                                <td class="text-end item-subtotal">₱21.98</td>
                             </tr>
                         </tbody>
                         <tfoot>
                             <tr>
                                 <td colspan="3" class="text-end"><strong>Subtotal:</strong></td>
-                                <td class="text-end">₱21.98</td>
+                                <td class="text-end" id="order-subtotal">₱21.98</td>
                             </tr>
                             <tr>
                                 <td colspan="3" class="text-end"><strong>Tax (5%):</strong></td>
-                                <td class="text-end">₱1.10</td>
+                                <td class="text-end" id="order-tax">₱1.10</td>
                             </tr>
                             <tr>
                                 <td colspan="3" class="text-end"><strong>Total:</strong></td>
-                                <td class="text-end"><strong>₱23.08</strong></td>
+                                <td class="text-end" id="order-total"><strong>₱23.08</strong></td>
                             </tr>
                         </tfoot>
                     </table>
+
+                    <div class="mt-4">
+                        <h6><strong>Delivery Instructions</strong></h6>
+                        <textarea class="form-control" rows="2" placeholder="Add any special instructions for delivery">Leave package at the front door</textarea>
+                    </div>
                 </div>
                 <div class="modal-footer">
                     <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Close</button>
-                    <button type="button" class="btn btn-danger me-2">Reject Order</button>
-                    <button type="button" class="btn btn-primary" id="confirm-order-btn">
+                    <button type="button" class="btn btn-danger me-2" id="cancel-order-btn">Cancel Order</button>
+                    <button type="button" class="btn btn-primary" id="update-order-btn">
                         <span class="spinner-border spinner-border-sm d-none" role="status" aria-hidden="true"></span>
-                        Confirm Order
+                        Update Order
                     </button>
                 </div>
             </div>
@@ -670,20 +731,73 @@
                 }, 1000);
             });
 
-            // Confirm order button loading state
-            document.getElementById('confirm-order-btn').addEventListener('click', function () {
+            // Quantity controls
+            document.querySelectorAll('.quantity-decrease').forEach(button => {
+                button.addEventListener('click', function () {
+                    const input = this.nextElementSibling;
+                    if (parseInt(input.value) > 1) {
+                        input.value = parseInt(input.value) - 1;
+                        updateSubtotal(input);
+                    }
+                });
+            });
+
+            document.querySelectorAll('.quantity-increase').forEach(button => {
+                button.addEventListener('click', function () {
+                    const input = this.previousElementSibling;
+                    input.value = parseInt(input.value) + 1;
+                    updateSubtotal(input);
+                });
+            });
+
+            document.querySelectorAll('.item-quantity').forEach(input => {
+                input.addEventListener('change', function () {
+                    if (parseInt(this.value) < 1) {
+                        this.value = 1;
+                    }
+                    updateSubtotal(this);
+                });
+            });
+
+            function updateSubtotal(input) {
+                const row = input.closest('tr');
+                const price = parseFloat(row.querySelector('td:nth-child(2)').textContent.replace('₱', ''));
+                const quantity = parseInt(input.value);
+                const subtotal = price * quantity;
+                row.querySelector('.item-subtotal').textContent = '₱' + subtotal.toFixed(2);
+
+                // Update order totals
+                updateOrderTotals();
+            }
+
+            function updateOrderTotals() {
+                let subtotal = 0;
+                document.querySelectorAll('.item-subtotal').forEach(el => {
+                    subtotal += parseFloat(el.textContent.replace('₱', ''));
+                });
+
+                const tax = subtotal * 0.05;
+                const total = subtotal + tax;
+
+                document.getElementById('order-subtotal').textContent = '₱' + subtotal.toFixed(2);
+                document.getElementById('order-tax').textContent = '₱' + tax.toFixed(2);
+                document.getElementById('order-total').textContent = '₱' + total.toFixed(2);
+            }
+
+            // Update order button
+            document.getElementById('update-order-btn').addEventListener('click', function () {
                 const spinner = this.querySelector('.spinner-border');
                 const originalText = this.innerHTML;
 
                 // Show spinner
                 spinner.classList.remove('d-none');
-                this.innerHTML = '<span class="spinner-border spinner-border-sm" role="status" aria-hidden="true"></span> Processing...';
+                this.innerHTML = '<span class="spinner-border spinner-border-sm" role="status" aria-hidden="true"></span> Updating...';
                 this.disabled = true;
 
                 // Simulate processing
                 setTimeout(() => {
                     // Hide spinner
-                    this.innerHTML = '<i class="fas fa-check"></i> Order Confirmed';
+                    this.innerHTML = '<i class="fas fa-check"></i> Order Updated';
                     this.classList.remove('btn-primary');
                     this.classList.add('btn-success');
 
@@ -702,6 +816,20 @@
                         }, 500);
                     }, 1500);
                 }, 2000);
+            });
+
+            // Cancel order button
+            document.getElementById('cancel-order-btn').addEventListener('click', function () {
+                if (confirm('Are you sure you want to cancel this order?')) {
+                    this.innerHTML = '<span class="spinner-border spinner-border-sm" role="status" aria-hidden="true"></span> Cancelling...';
+                    this.disabled = true;
+
+                    setTimeout(() => {
+                        alert('Your order has been cancelled.');
+                        const modal = bootstrap.Modal.getInstance(document.getElementById('orderModal'));
+                        modal.hide();
+                    }, 1500);
+                }
             });
 
             // Fetch cart and payment method from localStorage (if available)
@@ -728,12 +856,18 @@
                     subtotal += itemTotal;
 
                     orderItemsHtml += `
-                            <tr>
-                                <td>${item.name}</td>
-                                <td>₱${item.price.toFixed(2)}</td>
-                                <td>${item.quantity}</td>
-                                <td class="text-end">₱${itemTotal.toFixed(2)}</td>
-                            </tr>`;
+                                    <tr>
+                                        <td>${item.name}</td>
+                                        <td>₱${item.price.toFixed(2)}</td>
+                                        <td>
+                                            <div class="quantity-control">
+                                                <button class="btn btn-sm btn-outline-secondary quantity-decrease">-</button>
+                                                <input type="number" min="1" value="${item.quantity}" class="item-quantity">
+                                                <button class="btn btn-sm btn-outline-secondary quantity-increase">+</button>
+                                            </div>
+                                        </td>
+                                        <td class="text-end item-subtotal">₱${itemTotal.toFixed(2)}</td>
+                                    </tr>`;
                 });
 
                 document.getElementById('order-items').innerHTML = orderItemsHtml;
@@ -742,20 +876,38 @@
                 const tax = subtotal * 0.05;
                 const total = subtotal + tax;
 
-                const tfoot = document.querySelector('.order-details-table tfoot');
-                tfoot.innerHTML = `
-                        <tr>
-                            <td colspan="3" class="text-end"><strong>Subtotal:</strong></td>
-                            <td class="text-end">₱${subtotal.toFixed(2)}</td>
-                        </tr>
-                        <tr>
-                            <td colspan="3" class="text-end"><strong>Tax (5%):</strong></td>
-                            <td class="text-end">₱${tax.toFixed(2)}</td>
-                        </tr>
-                        <tr>
-                            <td colspan="3" class="text-end"><strong>Total:</strong></td>
-                            <td class="text-end"><strong>₱${total.toFixed(2)}</strong></td>
-                        </tr>`;
+                document.getElementById('order-subt
+                        document.getElementById('order-subtotal').textContent = `₱${subtotal.toFixed(2)}`;
+                document.getElementById('order-tax').textContent = `₱${tax.toFixed(2)}`;
+                document.getElementById('order-total').textContent = `₱${total.toFixed(2)}`;
+
+                // Re-bind quantity control events after dynamically generating content
+                document.querySelectorAll('.quantity-decrease').forEach(button => {
+                    button.addEventListener('click', function () {
+                        const input = this.nextElementSibling;
+                        if (parseInt(input.value) > 1) {
+                            input.value = parseInt(input.value) - 1;
+                            updateSubtotal(input);
+                        }
+                    });
+                });
+
+                document.querySelectorAll('.quantity-increase').forEach(button => {
+                    button.addEventListener('click', function () {
+                        const input = this.previousElementSibling;
+                        input.value = parseInt(input.value) + 1;
+                        updateSubtotal(input);
+                    });
+                });
+
+                document.querySelectorAll('.item-quantity').forEach(input => {
+                    input.addEventListener('change', function () {
+                        if (parseInt(this.value) < 1) {
+                            this.value = 1;
+                        }
+                        updateSubtotal(this);
+                    });
+                });
             }
 
             // Set today's date for the order
