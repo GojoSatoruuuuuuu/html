@@ -1,0 +1,52 @@
+<!-- Example Product Card with Heart Favorite Button -->
+<!-- Include this inside your product cards container -->
+
+<div class="row" id="product-cards">
+    <!-- Product Card Example -->
+    <div class="card" data-product-id="123">
+        <!-- Heart Favorite Button -->
+        <button class="favorite-btn">
+            <i class="fas fa-heart"></i>
+        </button>
+        
+        <img src="product-image.jpg" class="card-img-top" alt="Product Name">
+        
+        <div class="card-body">
+            <h5 class="card-title">Product Name</h5>
+            <p class="card-text">$19.99</p>
+            
+            <div class="quantity-control">
+                <button class="quantity-btn">-</button>
+                <input type="number" class="quantity-input" value="1" min="1">
+                <button class="quantity-btn">+</button>
+            </div>
+            
+            <button class="add-to-cart-btn">Add to Cart</button>
+        </div>
+    </div>
+    
+    <!-- More product cards with heart buttons -->
+    <div class="card" data-product-id="124">
+        <button class="favorite-btn">
+            <i class="fas fa-heart"></i>
+        </button>
+        
+        <img src="product-image-2.jpg" class="card-img-top" alt="Another Product">
+        
+        <div class="card-body">
+            <h5 class="card-title">Another Product</h5>
+            <p class="card-text">24.99</p>
+            
+            <div class="quantity-control">
+                <button class="quantity-btn">-</button>
+                <input type="number" class="quantity-input" value="1" min="1">
+                <button class="quantity-btn">+</button>
+            </div>
+            
+            <button class="add-to-cart-btn">Add to Cart</button>
+        </div>
+    </div>
+</div>
+
+<!-- Note: Make sure to include Font Awesome for the heart icon -->
+<!-- <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/5.15.4/css/all.min.css"> -->
